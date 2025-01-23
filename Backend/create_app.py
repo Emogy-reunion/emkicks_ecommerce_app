@@ -5,7 +5,7 @@ initializes it with the configuration settings
 '''
 
 
-def create_app:
+def create_app():
     '''
     creates the application instance and returns it
     '''
