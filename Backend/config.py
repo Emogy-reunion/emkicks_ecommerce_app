@@ -3,6 +3,7 @@ istores the app's configuration settings
 '''
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 
 class Config():
