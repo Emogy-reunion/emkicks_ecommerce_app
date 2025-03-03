@@ -7,7 +7,7 @@ from create_app import create_app
 
 
 app = create_app()
-db = SQLAlchemy(db)
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 class Users(db.Model):
