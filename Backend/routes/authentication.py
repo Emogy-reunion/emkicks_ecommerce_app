@@ -43,7 +43,6 @@ def login():
     authenticate the user
     logs them in to the session
     '''
-
     data = request.json
 
     identifier = data['identifier']
@@ -62,11 +61,12 @@ def login():
         if not user:
             return jsonify({'error': 'The username you entered does not match any account!'})
 
-
     if user.check_passwordhash(password):
-    '''
-    checks if the passwords match
-    '''
+        '''
+        verifies the user password
+        if correct it creates and returns access token
+        if incorrect it returns an error message
+        '''
         access_token = create_access_token(identity=user.id)
         refresh_token = create_refresh_token(identity=user.id)
 
