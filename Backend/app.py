@@ -4,7 +4,7 @@ creates initial admins
 runs the application
 '''
 from create_app import create_app
-from routes/authentication import auth
+from routes.authentication import auth
 
 
 app = create_app()
