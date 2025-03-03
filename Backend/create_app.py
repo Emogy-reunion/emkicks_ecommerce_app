@@ -1,5 +1,5 @@
 from flask import Flask
-from configurations import Config
+from config import Config
 '''
 creates the application instance
 initializes it with the configuration settings
