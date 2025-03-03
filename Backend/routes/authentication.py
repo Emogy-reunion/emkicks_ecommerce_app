@@ -23,16 +23,58 @@ def register():
     user = Users.query.filter_by(email=email).first()
 
     if user:
-        return jsonify({'error': 'An account associated with this email exists'})
+        return jsonify({'error': 'An account associated with this email exists!'})
     else:
         try:
-            new_user = Users(firstname=firstanme, lastname=lastname,
+            new_user = Users(firstname=firstname, lastname=lastname,
                              email=email, username=username, phone=phone,
                              password=password)
             db.session.add(new_user)
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': 'An unexpected error occured. Please try again'})
+            return jsonify({'error': 'An unexpected error occured. Please try again!'})
 
         db.session.commit()
         return jsonify({'success': 'Account created successfully!'})
+
+@auth.route('/login', method=['POST'])
+def login():
+    '''
+    authenticate the user
+    logs them in to the session
+    '''
+
+    data = request.json
+
+    identifier = data['identifier']
+    password = data['password']
+
+    user = None
+
+    if '@' in identifier:
+        user = Users.query.filter_by(email=identifier).first()
+
+        if not user:
+            return jsonify({'error': 'The email you entered does not match any account!'})
+    else:
+        user = Users.query.filter_by(username=identifier).first()
+
+        if not user:
+            return jsonify({'error': 'The username you entered does not match any account!'})
+
+
+    if user.check_passwordhash(password):
+    '''
+    checks if the passwords match
+    '''
+        access_token = create_access_token(identity=user.id)
+        refresh_token = create_refresh_token(identity=user.id)
+
+        response = jsonify({'success': ' Successfully logged in!'})
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
+        return response
+    else:
+        return jsonify({'error': 'Incorrect password. Please try again!'})
+
+    
