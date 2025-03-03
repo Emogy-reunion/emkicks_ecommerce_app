@@ -37,7 +37,7 @@ def register():
         db.session.commit()
         return jsonify({'success': 'Account created successfully!'})
 
-@auth.route('/login', method=['POST'])
+@auth.route('/login', methods=['POST'])
 def login():
     '''
     authenticate the user
