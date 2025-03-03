@@ -1,5 +1,6 @@
 '''
 Initializes the tables
+Hash passwords
 '''
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -7,7 +8,7 @@ from create_app import create_app
 
 
 app = create_app()
-db = SQLAlchemy(db)
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 class Users(db.Model):
