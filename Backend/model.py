@@ -7,7 +7,7 @@ from create_app import create_app
 
 
 app = create_app()
-db = SQLAlchemy(db)
+db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 
 class Users(db.Model):
@@ -20,7 +20,8 @@ class Users(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     phone = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.STRING(100), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(50), default='guest')
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
@@ -38,3 +39,9 @@ class Users(db.Model):
         hashes the password to ensure that it is secure
         '''
         return bcrypt.generate_password_hash(password)
+
+    def check_passwordhash(self, password):
+        '''
+        compares the user password and the stored hash
+        '''
+        return bcrypt.check_password_hash(self.password, password)
