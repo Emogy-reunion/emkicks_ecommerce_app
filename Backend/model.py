@@ -26,6 +26,7 @@ class Users(db.Model):
     phone = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(50), default='guest')
+    verified = db.Column(db.Boolean, default=False)
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
