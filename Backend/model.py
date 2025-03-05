@@ -5,11 +5,14 @@ Hash passwords
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from create_app import create_app
+from itsdangerous.utils import URLSafeTimedSerializer
 
 
 app = create_app()
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+
+serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 class Users(db.Model):
     '''
@@ -46,3 +49,23 @@ class Users(db.Model):
         compares the user password and the stored hash
         '''
         return bcrypt.check_password_hash(self.password, password)
+
+    def generate_verification_token(self):
+        '''
+        serializes the user id and returns it
+        '''
+        return serializer.dumps({'user_id': self.id}, expires_in=3600)
+    
+    @staticmethod
+    def verify_verification_token(token):
+        '''
+        deserializes the token and extracts the user id
+        searches for the user in the database
+        if user exists it returns success message
+        '''
+        try:
+            data = serializer.loads(token, max_age=3600)
+            return db.session.get(Users, data['user_id'])
+        except Exception as e:
+            return None
+            
