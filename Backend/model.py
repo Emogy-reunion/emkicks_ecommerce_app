@@ -5,7 +5,7 @@ Hash passwords
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from create_app import create_app
-from itsdangerous.utils import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer
 
 
 app = create_app()
