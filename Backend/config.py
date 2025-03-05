@@ -17,7 +17,7 @@ class Config():
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     JWT_COOKIE_SECURE = False
     JWT_TOKEN_LOCATION = ['cookies']
-    MAIL_SERVER = smtp.gmail.com
+    MAIL_SERVER = 'smtp.gmail.com'
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     MAIL_USE_TLS = True
