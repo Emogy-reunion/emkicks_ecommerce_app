@@ -50,14 +50,14 @@ class Users(db.Model):
         '''
         return bcrypt.check_password_hash(self.password, password)
 
-    def generate_verification_token(self):
+    def generate_email_verification_token(self):
         '''
         serializes the user id and returns it
         '''
         return serializer.dumps({'user_id': self.id}, expires_in=3600)
     
     @staticmethod
-    def verify_verification_token(token):
+    def verify_email_verification_token(token):
         '''
         deserializes the token and extracts the user id
         searches for the user in the database
