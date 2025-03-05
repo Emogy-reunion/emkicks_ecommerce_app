@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from model import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
+from utils.verification_email import send_verification_email
 
 
 auth = Blueprint('auth', __name__)
@@ -35,7 +36,8 @@ def register():
             return jsonify({'error': 'An unexpected error occured. Please try again!'})
 
         db.session.commit()
-        return jsonify({'success': 'Account created successfully!'})
+        send_verification_email(new_user)
+        return jsonify({'success': 'Account created successfully!. Click the link sent to your email to verify you identity!'})
 
 @auth.route('/login', methods=['POST'])
 def login():
