@@ -24,3 +24,25 @@ def reset_password_token():
     else:
         return jsonify({'error': 'The email you entered does not match any account!'})
 
+
+
+@reset.route('/update_password/<token>', methods=['POST'])
+def update_password(token):
+    '''
+    checks if the token is valid and updates the user password
+    '''
+    data = request.json
+    password = data['password']
+
+    user = Users.verify_email_verification_token(token)
+    
+    if user:
+        try:
+            user.password = user.generate_password(password)
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'An unexpected error has occured. Please try again!'})
+        db.session.commit()
+        return jsonify('success': 'Password updated successfully!'})
+    else:
+        return jsonify({'error': 'Verification failed. Please try again!'})
