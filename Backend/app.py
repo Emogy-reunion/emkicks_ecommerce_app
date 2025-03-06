@@ -13,7 +13,6 @@ from routes.reset_password import reset
 
 app = create_app()
 jwt = JWTManager(app)
-mail = Mail(app)
 
 app.register_blueprint(auth)
 app.register_blueprint(verify)
