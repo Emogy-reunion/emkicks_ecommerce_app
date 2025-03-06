@@ -1,12 +1,15 @@
 from flask import url_for, render_template
-from flask_mail import Message
-from app import mail
+from flask_mail import Message, Mail
+from create_app import create_app
+
+app = create_app()
+mail = Mail(app)
 
 def send_verification_email(user):
     '''
     sends an email with the verification token to the user
     '''
-    verification_token = user.generate_verification_token()
+    verification_token = user.generate_email_verification_token()
     verification_url = url_for('https://mark.com/verify', verification_token=verification_token, _external=True)
 
     msg = Message(
