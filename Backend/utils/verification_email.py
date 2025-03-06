@@ -6,7 +6,7 @@ def send_verification_email(user):
     '''
     sends an email with the verification token to the user
     '''
-    verification_token = user.generate_verification_token()
+    verification_token = user.generate_email_verification_token()
     verification_url = url_for('https://mark.com/verify', verification_token=verification_token, _external=True)
 
     msg = Message(
