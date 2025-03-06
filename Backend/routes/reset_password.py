@@ -43,6 +43,6 @@ def update_password(token):
             db.session.rollback()
             return jsonify({'error': 'An unexpected error has occured. Please try again!'})
         db.session.commit()
-        return jsonify('success': 'Password updated successfully!'})
+        return jsonify({'success': 'Password updated successfully!'})
     else:
         return jsonify({'error': 'Verification failed. Please try again!'})
