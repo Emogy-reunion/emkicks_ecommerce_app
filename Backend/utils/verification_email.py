@@ -2,6 +2,7 @@ from flask import url_for, render_template
 from flask_mail import Message, Mail
 from create_app import create_app
 
+app = create_app()
 mail = Mail(app)
 
 def send_verification_email(user):
