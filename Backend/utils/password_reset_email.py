@@ -1,6 +1,9 @@
 from flask import url_for, render_template
-from app import mail
-from flask_mail import Message
+from create_app import create_app
+from flask_mail import Message, Mail
+
+app = create_app()
+mail = Mail(app)
 
 def send_password_reset_email(user):
     '''
