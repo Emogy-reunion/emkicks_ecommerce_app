@@ -3,7 +3,7 @@ allows users to reset their passwords
 '''
 from flask import Blueprint, request, jsonify
 from model import Users
-from password_reset_email import send_password_reset_email
+from utils.password_reset_email import send_password_reset_email
 
 
 reset = Blueprint('reset', __name__)
