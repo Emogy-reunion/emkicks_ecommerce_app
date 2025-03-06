@@ -1,7 +1,7 @@
 '''
 allows users to reset their passwords
 '''
-from flask import Blueprint, request_jsonify
+from flask import Blueprint, request, jsonify
 from model import Users
 from password_reset_email import send_password_reset_email
 
