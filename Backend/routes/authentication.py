@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from model import Users, db
+from email_validator import validate_email, EmailNotFoundError
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from utils.verification_email import send_verification_email
 
@@ -20,11 +21,13 @@ def register():
     phone = data['phone']
     password = data['password']
 
-
     user = Users.query.filter_by(email=email).first()
+    member = Users.query.filter_by(username=username).first()
 
     if user:
         return jsonify({'error': 'An account associated with this email exists!'})
+    elif member:
+        return jsonify({'error': 'An account associated with this username exists!'})
     else:
         try:
             new_user = Users(firstname=firstname, lastname=lastname,
