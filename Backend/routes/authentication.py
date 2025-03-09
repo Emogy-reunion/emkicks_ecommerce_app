@@ -24,6 +24,7 @@ def register():
 
     errors = {}
     firstname_errors = validate_firstname(firstname)
+    lastname_errors = validate_lastname(lastname)
 
     user = Users.query.filter_by(email=email).first()
     member = Users.query.filter_by(username=username).first()
