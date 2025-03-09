@@ -27,6 +27,18 @@ def register():
     lastname_errors = validate_lastname(lastname)
     email_errors = check_email(email)
 
+    if firstname_errors:
+        errors['firstname'] = firstname_errors
+
+    if lastname_errors:
+        errors['lastname'] = lastname_errors
+
+    if email_errors:
+        errors['email'] = email_errors
+
+    if errors:
+        return jsonify({'errors': errors})
+
     user = Users.query.filter_by(email=email).first()
     member = Users.query.filter_by(username=username).first()
 
