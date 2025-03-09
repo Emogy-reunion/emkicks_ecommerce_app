@@ -3,6 +3,7 @@ from model import Users, db
 from email_validator import validate_email, EmailNotFoundError
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from utils.verification_email import send_verification_email
+from utils.validatation import validate_firstname, validate_lastname, check_email
 
 
 auth = Blueprint('auth', __name__)
@@ -20,6 +21,23 @@ def register():
     username = data['username']
     phone = data['phone']
     password = data['password']
+
+    errors = {}
+    firstname_errors = validate_firstname(firstname)
+    lastname_errors = validate_lastname(lastname)
+    email_errors = check_email(email)
+
+    if firstname_errors:
+        errors['firstname'] = firstname_errors
+
+    if lastname_errors:
+        errors['lastname'] = lastname_errors
+
+    if email_errors:
+        errors['email'] = email_errors
+
+    if errors:
+        return jsonify({'errors': errors})
 
     user = Users.query.filter_by(email=email).first()
     member = Users.query.filter_by(username=username).first()
