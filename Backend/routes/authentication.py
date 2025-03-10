@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from model import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
 from utils.verification_email import send_verification_email
-from utils.validatation import validate_firstname, validate_lastname, check_email
+from utils.validation import validate_firstname, validate_lastname, check_email
 
 
 auth = Blueprint('auth', __name__)
