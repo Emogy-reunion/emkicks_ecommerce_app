@@ -1,9 +1,8 @@
 from flask import Blueprint, jsonify, request
 from model import Users, db
-from email_validator import validate_email, EmailNotFoundError
-from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
+from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
-from utils.validatation import validate_firstname, validate_lastname, check_email
+from utils.validation import validate_firstname, validate_lastname, check_email
 
 
 auth = Blueprint('auth', __name__)
@@ -100,4 +99,22 @@ def login():
     else:
         return jsonify({'error': 'Incorrect password. Please try again!'})
 
-    
+@auth.route('/logout', methods=['POST'])
+def logout():
+    '''
+    logs out the user by destroying the jwt cookies
+    '''
+    response = jsonify({'success': 'Successfully logged out!'})
+    unset_jwt_cookies(response)
+    return response
+
+@jwt_required(refresh=True)
+@auth.route('/refresh_token', methods=['POST'])
+def refresh_token():
+    '''
+    renews an access token after it expires
+    '''
+    user_id = get_jwt_identity()
+    response = ({'success': 'Access cookies refreshed successfully!'})
+    set_jwt_access_cookies(response)
+    return response
