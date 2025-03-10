@@ -1,4 +1,4 @@
-from email_validator import validate_email, EmailNotFoundError
+from email_validator import validate_email, EmailNotValidError
 import re
 
 def validate_firstname(firstname):
@@ -43,6 +43,6 @@ def check_email(email):
     else:
         try:
             valid = validate_email(email, check_delivaribility=True)
-        except EmailNotFoundError as e:
+        except EmailNotValidError as e:
             errors.append('Invalid email format!')
     return errors
