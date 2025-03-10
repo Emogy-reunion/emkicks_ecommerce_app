@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 from model import Users, db
-from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies
+from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies
 from utils.verification_email import send_verification_email
 from utils.validation import validate_firstname, validate_lastname, check_email
 
@@ -99,4 +99,11 @@ def login():
     else:
         return jsonify({'error': 'Incorrect password. Please try again!'})
 
-    
+@auth.route('/logout', methods=['POST'])
+def logout():
+    '''
+    logs out the user by destroying the jwt cookies
+    '''
+    response = jsonify({'success': 'Successfully logged out!'})
+    unset_jwt_cookies(response)
+    return response
