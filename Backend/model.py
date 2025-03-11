@@ -69,4 +69,16 @@ class Users(db.Model):
             return db.session.get(Users, data['user_id'])
         except Exception as e:
             return None
-            
+
+
+class Sneakers(db.Model):
+    '''
+    initializes the sneakers table with data
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.String(50), nullable=False)
+    size = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(50), nullable=False)
