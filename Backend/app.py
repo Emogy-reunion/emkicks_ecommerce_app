@@ -9,6 +9,7 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from routes.verification import verify
 from routes.reset_password import reset
+from routes.upload import post
 
 
 app = create_app()
@@ -17,6 +18,7 @@ jwt = JWTManager(app)
 app.register_blueprint(auth)
 app.register_blueprint(verify)
 app.register_blueprint(reset)
+app.register_blueprint(post)
 
 if __name__ == '__main__':
         app.run(debug=True)
