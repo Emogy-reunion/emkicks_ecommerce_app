@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from create_app import create_app
 from itsdangerous import URLSafeTimedSerializer
+from datetime import datetime
 
 
 app = create_app()
@@ -27,6 +28,7 @@ class Users(db.Model):
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
+    created_at db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
@@ -84,6 +86,7 @@ class Sneakers(db.Model):
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
+    posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
     def __init__(self, name, price, size, status, description, category):
