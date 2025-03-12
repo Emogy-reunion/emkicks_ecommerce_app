@@ -93,3 +93,10 @@ class Sneakers(db.Model):
         status = self.status
         description = self.description
         category = self.category
+
+class Images(db.Model):
+    '''
+    stores the image filenames for the sneakers
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    filename = db.Column(db.String(200), nullable=False)
