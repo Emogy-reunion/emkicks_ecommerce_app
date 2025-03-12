@@ -90,12 +90,12 @@ class Sneakers(db.Model):
         '''
         initializes the table with data
         '''
-        name = self.name
-        price = self.price
-        size = self.price
-        status = self.status
-        description = self.description
-        category = self.category
+        self.name = name
+        self.price = price
+        self.size = price
+        self.status = status
+        self.description = description
+        self.category = category
 
 class Images(db.Model):
     '''
@@ -107,3 +107,10 @@ class Images(db.Model):
     sneaker_id = db.Column(db.Integer, db.ForeignKey('sneakers.id'), nullable=False)
     filename = db.Column(db.String(200), nullable=False)
     sneaker = db.relationship('Sneakers', back_populates='images', lazy=True)
+
+    def __init__(self, sneaker_id, filename):
+        '''
+        initializes the images table with data
+        '''
+        self.sneaker_id = sneaker_id
+        self.filename = filename
