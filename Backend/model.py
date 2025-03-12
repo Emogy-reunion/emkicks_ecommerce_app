@@ -74,6 +74,8 @@ class Users(db.Model):
 class Sneakers(db.Model):
     '''
     stores the sneaker information
+    Has a one to many relationship with the Images model - one post can have
+        multiple images
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
@@ -82,6 +84,7 @@ class Sneakers(db.Model):
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
+    images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
     def __init__(self, name, price, size, status, description, category):
         '''
@@ -97,6 +100,10 @@ class Sneakers(db.Model):
 class Images(db.Model):
     '''
     stores the image filenames for the sneakers
+    Has many to one relationship with the Sneakers model - multiple images
+        can be related to one image
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
+    sneaker_id = db.Column(db.Integer, db.ForeignKey('sneakers.id'), nullable=False)
     filename = db.Column(db.String(200), nullable=False)
+    sneaker = db.relationship('Sneakers', back_populates='images', lazy=True)
