@@ -4,7 +4,10 @@ saves uploads to the database
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from utils.role import role_required
+import os
 from model import Users, Sneakers, Images, db
+from check_file_extension import allowed_extension
+from werkzeug.utils import secure_filename
 
 post = Blueprint('post', __name__)
 
@@ -35,9 +38,24 @@ def upload():
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
     db.session.commit()
 
+    uploads = []
+
     for file in request.files:
         '''
         iterate through the files object
         save the image filenames in the images table
         '''
-        if file and 
+        if file and allowed_extension(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
+            uploads.append(filename)
+            db.session.add(sneaker_image)
+        else:
+            return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
+    db.session.commit()
+
+    if uploads:
+        return jsonify({'success': 'Post submitted successfully!'}), 201
+    else:
+        return jsonify({'error': 'Post submission failed. Please try again!'}), 400
