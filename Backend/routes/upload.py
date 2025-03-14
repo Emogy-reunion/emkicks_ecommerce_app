@@ -52,7 +52,7 @@ def upload():
             uploads.append(filename)
             db.session.add(sneaker_image)
         else:
-            return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
+            return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
     db.session.commit()
 
     if uploads:
