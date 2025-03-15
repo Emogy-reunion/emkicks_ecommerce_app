@@ -14,10 +14,10 @@ def register():
     '''
     data = request.json
 
-    firstname = data['firstname']
-    lastname = data['lastname']
-    email = data['email']
-    username = data['username']
+    firstname = data['firstname'].lower()
+    lastname = data['lastname'].lower()
+    email = data['email'].lower()
+    username = data['username'].lower()
     phone = data['phone']
     password = data['password']
 
@@ -67,7 +67,7 @@ def login():
     '''
     data = request.json
 
-    identifier = data['identifier']
+    identifier = data['identifier'].lower()
     password = data['password']
 
     user = None
