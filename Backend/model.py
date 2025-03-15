@@ -82,7 +82,7 @@ class Sneakers(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
     price = db.Column(db.String(50), nullable=False)
-    size = db.Column(db.Integer, nullable=False)
+    size = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
@@ -117,3 +117,27 @@ class Images(db.Model):
         '''
         self.sneaker_id = sneaker_id
         self.filename = filename
+
+class Jerseys(db.Model):
+    '''
+    stores the jersey information
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name = db.Column(db.String(150), nullable=False)
+    jersey_type = db.Column(db.String(150), nullable=False)
+    price - db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    size = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    posted_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, name, jersey_type, price, status, size, description):
+        '''
+        initializes the table with data
+        '''
+        self.name = name
+        self.jersey_type = jersey_type
+        self.price = price
+        self.status = status
+        self.size = size
+        self.description = description
