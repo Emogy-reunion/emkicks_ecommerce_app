@@ -22,12 +22,12 @@ def upload():
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
     data = request.json
-    name = data['name']
+    name = data['name'].lower()
     price = data['price']
     size = data['size']
     description = data['description']
-    status = data['status']
-    category = data['category']
+    status = data['status'].lower()
+    category = data['category'].lower()
 
     new_sneaker = Sneakers(name=name, price=price, size=size,
                                description=description, status=status, category=category)
