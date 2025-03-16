@@ -18,8 +18,8 @@ def verify_email(token):
         try:
             user.verified = True
         except Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again later!'})
+            return jsonify({'error': 'An unexpected error occured. Please try again later!'}), 500
         db.session.commit()
-        return jsonify({'success': 'Verified successfully!'})
+        return jsonify({'success': 'Your account has been verified successfully!'}), 200
     else:
-        return jsonify({'error': ' User verification failed. Please try again!'})
+        return jsonify({'error': ' Verification token has expired. Please request a new one!'}), 403
