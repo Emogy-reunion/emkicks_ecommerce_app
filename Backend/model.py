@@ -81,7 +81,9 @@ class Sneakers(db.Model):
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    price = db.Column(db.String(50), nullable=False)
+    original_price = db.Column(db.Float, nullable=False)
+    discount_rate = db.Column(db.Integer, default=0)
+    final_price = db.Column(db.Float, nullable=False)
     size = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -89,13 +91,16 @@ class Sneakers(db.Model):
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, price, size, status, description, category):
+    def __init__(self, name, original_price, discount_rate,
+                 final_price, size, status, description, category):
         '''
         initializes the table with data
         '''
         self.name = name
-        self.price = price
-        self.size = price
+        self.original_price = original_ price
+        self.discount_rate = discount_rate
+        self.final_price = final_price
+        self.size = size
         self.status = status
         self.description = description
         self.category = category
@@ -121,23 +126,52 @@ class Images(db.Model):
 class Jerseys(db.Model):
     '''
     stores the jersey information
+    has a one to many relationship with the JerseyImages table
+        one jersey can have multiple images
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
     jersey_type = db.Column(db.String(150), nullable=False)
-    price - db.Column(db.Float, nullable=False)
+    original_price = db.Column(db.Float, nullable=False)
+    discount_rate = db.Column(db.Integer, default=0)
+    final_price = db.Column(db.Float, nullable=false)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
+    season = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    images = db.relationship('JerseyImages', back_populates='jersey', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, jersey_type, price, status, size, description):
+    def __init__(self, name, jersey_type, original_price, discount_rate,
+                 final_price, season, status, size, description):
         '''
         initializes the table with data
         '''
         self.name = name
         self.jersey_type = jersey_type
-        self.price = price
+        self.original_price = original_price
+        self.discount_rate = discount_rate
+        self.final_price = final_price
         self.status = status
         self.size = size
         self.description = description
+        self.season = season
+
+class JerseyImages(db.Model):
+    '''
+    stores images related to a certain jersey
+    has a many to one relationship with the Jerseys table
+        multiple images can belong to one jersey
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    jersey_id = db.Column(db.Integer, db.ForeignKey('jerseys.id'), nullable=False)
+    filename = db.Column(db.String(200), nullable=False)
+    jersey = db.relationship('Jerseys', back_populates='images', lazy=True)
+
+    def __init__(self, jersey_id, filename):
+        '''
+        initialize the table with data
+        '''
+        self.jersey_id = jersey_id
+        self.filename = filename
+
