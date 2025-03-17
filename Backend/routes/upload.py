@@ -46,11 +46,15 @@ def sneaker_upload():
         save the image filenames in the images table
         '''
         if file and allowed_extension(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
-            uploads.append(filename)
-            db.session.add(sneaker_image)
+            try:
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
+                uploads.append(filename)
+                db.session.add(sneaker_image)
+            except Exception as e:
+                db.session.rollba()
+                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
         else:
             return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
     db.session.commit()
@@ -113,6 +117,8 @@ def jersey_upload():
             except Exception as e:
                 db.session.rollback()
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+        else:
+            return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
     db.session.commit()
 
     if uploads:
