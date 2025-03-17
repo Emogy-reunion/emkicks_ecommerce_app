@@ -128,10 +128,11 @@ class Jerseys(db.Model):
     price - db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
+    season = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __init__(self, name, jersey_type, price, status, size, description):
+    def __init__(self, name, jersey_type, price, season, status, size, description):
         '''
         initializes the table with data
         '''
@@ -141,3 +142,4 @@ class Jerseys(db.Model):
         self.status = status
         self.size = size
         self.description = description
+        self.season = season
