@@ -81,7 +81,9 @@ class Sneakers(db.Model):
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
-    price = db.Column(db.String(50), nullable=False)
+    original_price = db.Column(db.Float, nullable=False)
+    discount_rate = db.Column(db.Integer, default=0)
+    final_price = db.Column(db.Float, nullable=False)
     size = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -89,13 +91,16 @@ class Sneakers(db.Model):
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, price, size, status, description, category):
+    def __init__(self, name, original_price, discount_rate,
+                 final_price, size, status, description, category):
         '''
         initializes the table with data
         '''
         self.name = name
-        self.price = price
-        self.size = price
+        self.original_price = original_ price
+        self.discount_rate = discount_rate
+        self.final_price = final_price
+        self.size = size
         self.status = status
         self.description = description
         self.category = category
@@ -127,7 +132,9 @@ class Jerseys(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
     jersey_type = db.Column(db.String(150), nullable=False)
-    price - db.Column(db.Float, nullable=False)
+    original_price = db.Column(db.Float, nullable=False)
+    discount_rate = db.Column(db.Integer, default=0)
+    final_price = db.Column(db.Float, nullable=false)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
     season = db.Column(db.String(50), nullable=False)
@@ -135,13 +142,16 @@ class Jerseys(db.Model):
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('JerseyImages', back_populates='jersey', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, jersey_type, price, season, status, size, description):
+    def __init__(self, name, jersey_type, original_price, discount_rate,
+                 final_price, season, status, size, description):
         '''
         initializes the table with data
         '''
         self.name = name
         self.jersey_type = jersey_type
-        self.price = price
+        self.original_price = original_price
+        self.discount_rate = discount_rate
+        self.final_price = final_price
         self.status = status
         self.size = size
         self.description = description
