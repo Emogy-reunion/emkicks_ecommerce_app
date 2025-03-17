@@ -132,8 +132,9 @@ class Jerseys(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(150), nullable=False)
     jersey_type = db.Column(db.String(150), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    discount = db.Column(db.Integer, default=0) 
+    original_price = db.Column(db.Float, nullable=False)
+    discount_rate = db.Column(db.Integer, default=0)
+    final_price = db.Column(db.Float, nullable=false)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
     season = db.Column(db.String(50), nullable=False)
@@ -141,14 +142,16 @@ class Jerseys(db.Model):
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('JerseyImages', back_populates='jersey', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, jersey_type, price, discount, season, status, size, description):
+    def __init__(self, name, jersey_type, original_price, discount_rate,
+                 final_price, season, status, size, description):
         '''
         initializes the table with data
         '''
         self.name = name
         self.jersey_type = jersey_type
-        self.price = price
-        self.discount = discount
+        self.original_price = original_price
+        self.discount_rate = discount_rate
+        self.final_price = final_price
         self.status = status
         self.size = size
         self.description = description
