@@ -4,6 +4,7 @@ saves uploads to the database
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 from utils.role import role_required
+from utils.discount import calculate_discount
 import os
 from model import Users, Sneakers, Images, db, Jerseys, JerseyImages
 from check_file_extension import allowed_extension
@@ -29,10 +30,14 @@ def sneaker_upload():
     description = data['description']
     status = data['status'].lower()
     category = data['category'].lower()
+    final_price = original_price
 
-    new_sneaker = Sneakers(name=name, original_price=original_price, size=size,
-                               discount_rate=discount_rate, description=description,
-                           status=status, category=category)
+    if discount_rate > 0:
+        final_price = calculate_discount(discount_rate=dicount_rate, original_price=original_price)
+
+    new_sneaker = Sneakers(name=name, original_price=original_price, size=size, 
+                           discount_rate=discount_rate, final_price=final_price,
+                           description=description, status=status, category=category)
     try:
         db.session.add(new_sneaker)
     except Exception as e:
@@ -85,10 +90,14 @@ def jersey_upload():
     size = data['size'].lower()
     season = data['season']
     description = data['description']
+    final_price = original_price
 
-    new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price,
-                         discount_rate=discount_rate, status=status, size=size,
-                         season=season, description=description)
+    if discount_rate > 0:
+        final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
+
+
+    new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
+                         final_price=final_price, status=status, size=size, season=season, description=description)
 
     try:
         db.session.add(new_jersey)
