@@ -23,14 +23,16 @@ def sneaker_upload():
 
     data = request.json
     name = data['name'].lower()
-    price = float(data['price'])
+    original_price = float(data['original_price'])
+    discount_rate = int(data['discount_rate'])
     size = int(data['size'])
     description = data['description']
     status = data['status'].lower()
     category = data['category'].lower()
 
-    new_sneaker = Sneakers(name=name, price=price, size=size,
-                               description=description, status=status, category=category)
+    new_sneaker = Sneakers(name=name, original_price=original_price, size=size,
+                               discount_rate=discount_rate, description=description,
+                           status=status, category=category)
     try:
         db.session.add(new_sneaker)
     except Exception as e:
@@ -77,15 +79,16 @@ def jersey_upload():
     data = request.json
     name = data['name'].lower()
     jersey_type = data['jersey_type'].lower()
-    price = float(data['price'])
+    original_price = float(data['original_price'])
+    discount_rate = int(data['discount_rate'])
     status = data['status'].lower()
     size = data['size'].lower()
     season = data['season']
     description = data['description']
 
-    new_jersey = Jerseys(name=name, jersey_type=jersey_type, price=price,
-                         status=status, size=size, season=season,
-                         description=description)
+    new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price,
+                         discount_rate=discount_rate, status=status, size=size,
+                         season=season, description=description)
 
     try:
         db.session.add(new_jersey)
