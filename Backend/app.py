@@ -11,6 +11,7 @@ from utils.create_upload_folder import create_upload_folder
 from routes.verification import verify
 from routes.reset_password import reset
 from routes.upload import post
+from routes.collections import posts
 
 
 app = create_app()
@@ -20,6 +21,7 @@ app.register_blueprint(auth)
 app.register_blueprint(verify)
 app.register_blueprint(reset)
 app.register_blueprint(post)
+app.register_blueprint(posts)
 
 create_upload_folder()
 
