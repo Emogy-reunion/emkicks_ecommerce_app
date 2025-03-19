@@ -19,7 +19,10 @@ def men_sneakers_preview():
     sneakers = Users.query.filter_by(category == 'men').order_by(Sneak ers.id.desc()).all()
     paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
-    results = []
-    for item in paginated_results.items:
-        item
+    sneakers = []
+    if not paginated_results.items:
+        return jsonify({'error': 'Sneakers not found!'})
+    else:
+        for item in paginated_results.items:
+            sneaker.append(item)
 
