@@ -24,5 +24,23 @@ def men_sneakers_preview():
         return jsonify({'error': 'Sneakers not found!'})
     else:
         for item in paginated_results.items:
-            sneaker.append(item)
+            sneaker.append({
+                'name': item.name,
+                'price': item.final_price,
+                'original_price': item.original_price,
+                'discount': item.discount_rate
+                'images': [image.filename for image in item.images[0]] if images else None
+                })
+        response = {
+                'sneakers': sneakers,
+                'pagination': {
+                    'page': paginated_results.page,
+                    'per_page': paginated_results.per_page,
+                    'next': paginated_results.next_num if paginated_results.has_next else None,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev else None,
+                    'total': paginated_results.total,
+                    'pages': paginated_results.pages
+                    }
+                }
+        return jsonify(response)
 
