@@ -47,11 +47,11 @@ def men_sneakers_preview():
                     'pages': paginated_results.pages
                     }
                 }
-        return jsonify(response)
+        return jsonify(response), 200
 
 
 @posts.route('/women_sneaker_preview', methods=['GET'])
-def women_sneaker_preview():
+def women_sneakers_preview():
     '''
     retrieves the preview for the women's sneakers
     '''
@@ -61,7 +61,6 @@ def women_sneaker_preview():
     sneakers = Sneakers.query.filter(category == 'women').order_by(Sneakers.id.desc()).all()
     paginated_results = sneakers.paginate_results(page=page, per_page=per_page)
 
-    sneakers = []
     if not paginated_results.items:
         return jsonify({'error': 'No sneakers available at the moment. Stay tuned for new arrivals!'}), 404
     else:
@@ -89,4 +88,44 @@ def women_sneaker_preview():
                     'previous': paginated_results.prev_num if paginated_results.has_prev else None
                     }i
                 }
-        return jsonify(response)
+        return jsonify(response), 200
+
+@posts.routes('/kids_sneakers_preview', methods=['GET'])
+def kids_sneakers_preview():
+    '''
+    retrieves the kids sneakers which will be displayed as preview
+    returns the paginated results
+    '''
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 15, type=int)
+
+    sneakers = Sneakers.query.filter(category == 'kids').order_by(Sneakers.id.desc()).all()
+    paginated_results = sneakers.paginate(page=page, per_page=per_page)
+
+    if not paginated_results.items:
+        return jsonify({'error': 'No sneakers available at the moment. Stay tuned for new arrivals!'}), 404
+    else:
+        sneakers = [
+                {
+                    'name': item.name,
+                    'sneaker_id': item.id,
+                    'price': item.final_price,
+                    'original_price': item.original_price,
+                    'discount': item.discount,
+                    'image': item.images[0].filename it item.images else None
+                    }
+                for item in paginated_results.items
+                ]
+        response = {
+                'sneakers': sneakers,
+                'pagination': {
+                    'page': paginated_results.page,
+                    'per_page': paginated_results.per_page,
+                    'pages': paginated_resuls.pages,
+                    'total': paginated_results.total,
+                    'next': paginated_results.next_num if paginated_results.has_next else None,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev else None
+                    }
+                }
+        return jsonify(response), 200
+
