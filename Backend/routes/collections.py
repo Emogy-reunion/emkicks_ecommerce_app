@@ -27,6 +27,7 @@ def men_sneakers_preview():
                 {
                     'name': item.name,
                     'sneaker_id': item.id,
+                    'status': item.status,
                     'price': item.final_price,
                     'original_price': item.original_price,
                     'discount': item.discount_rate,
@@ -64,14 +65,19 @@ def women_sneaker_preview():
     if not paginated_results.items:
         return jsonify({'error': 'No sneakers available at the moment. Stay tuned for new arrivals!'}), 404
     else:
-        for item in paginated_results.items:
-            sneakers.append({
-                'name': item.name,
-                'price': item.price,
-                'original_price': item.original_price,
-                'discount': item.discount_rate,
-                'image': item.images[0].filename if item.images else None
-                })
+        sneakers = [
+                {
+                    'name': item.name,
+                    'sneaker_id': item.sneaker_id,
+                    'status': item.status,
+                    'price': item.final_price,
+                    'original_price': item.original_price,
+                    'discount': item.discount_rate,
+                    'image': item.images[0].filename if item.images else None
+                    }
+                for item in paginated_results.items
+                ]
+        
         response = {
                 'sneakers': sneakers,
                 'pagination': {
@@ -81,6 +87,6 @@ def women_sneaker_preview():
                     'pages': paginated_results.pages,
                     'next': paginated_results.next_num if paginated_results.has_next else None,
                     'previous': paginated_results.prev_num if paginated_results.has_prev else None
-                    }
+                    }i
                 }
-        return jsonify(response<F9><F8>)
+        return jsonify(response)
