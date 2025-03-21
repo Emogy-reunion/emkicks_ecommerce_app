@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from model import Users, db
+from modelis import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
 from utils.validation import validate_firstname, validate_lastname, check_email
@@ -51,11 +51,10 @@ def register():
                              email=email, username=username, phone=phone,
                              password=password)
             db.session.add(new_user)
+            db.session.commit()
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-
-        db.session.commit()
         send_verification_email(new_user)
         return jsonify({'success': 'Account created successfully!. Click the link sent to your email to verify you identity!'}), 201
 
