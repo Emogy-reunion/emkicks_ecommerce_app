@@ -134,7 +134,7 @@ class Jerseys(db.Model):
     jersey_type = db.Column(db.String(150), nullable=False)
     original_price = db.Column(db.Float, nullable=False)
     discount_rate = db.Column(db.Integer, default=0)
-    final_price = db.Column(db.Float, nullable=false)
+    final_price = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
     season = db.Column(db.String(50), nullable=False)
