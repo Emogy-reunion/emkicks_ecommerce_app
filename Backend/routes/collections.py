@@ -26,6 +26,7 @@ def men_sneakers_preview():
         sneakers = [
                 {
                     'name': item.name,
+                    'sneaker_id': item.id,
                     'price': item.final_price,
                     'original_price': item.original_price,
                     'discount': item.discount_rate,
