@@ -2,7 +2,7 @@
 Handles token verification via email
 '''
 from flask import Blueprint, jsonify
-from model import db, Users
+from models import db, Users
 
 verify = Blueprint('verify', __name__)
 
