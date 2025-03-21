@@ -17,7 +17,7 @@ def men_sneakers_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    sneakers = Sneakers.query.filter(category == 'men').order_by(Sneakers.id.desc()).all()
+    sneakers = Sneakers.query.filter(category == 'men').order_by(Sneakers.id.desc()).options(selectinload(Sneakers.images).all()
     paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
     if not paginated_results.items:
@@ -58,7 +58,7 @@ def women_sneakers_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    sneakers = Sneakers.query.filter(category == 'women').order_by(Sneakers.id.desc()).all()
+    sneakers = Sneakers.query.filter(category == 'women').order_by(Sneakers.id.desc()).options(selectinload(Sneakers.images)).all()
     paginated_results = sneakers.paginate_results(page=page, per_page=per_page)
 
     if not paginated_results.items:
@@ -99,7 +99,7 @@ def kids_sneakers_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    sneakers = Sneakers.query.filter(category == 'kids').order_by(Sneakers.id.desc()).all()
+    sneakers = Sneakers.query.filter(category == 'kids').order_by(Sneakers.id.desc()).options(selectinload(Sneakers.images).all()
     paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
     if not paginated_results.items:
@@ -129,3 +129,13 @@ def kids_sneakers_preview():
                 }
         return jsonify(response), 200
 
+@posts.route('/jersey_preview', methods=['GET'])
+def jersey_preview():
+    '''
+    retrieves the jersey details which will be displayed as a preview
+    returns paginated results
+    '''
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 15, type=int)
+
+    jerseys = Jerseys.
