@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from modelis import Users, db
+from models import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
 from utils.validation import validate_firstname, validate_lastname, check_email
