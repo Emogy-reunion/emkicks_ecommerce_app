@@ -97,7 +97,7 @@ class Sneakers(db.Model):
         initializes the table with data
         '''
         self.name = name
-        self.original_price = original_ price
+        self.original_price = original_price
         self.discount_rate = discount_rate
         self.final_price = final_price
         self.size = size
