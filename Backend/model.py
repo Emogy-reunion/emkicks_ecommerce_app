@@ -28,7 +28,7 @@ class Users(db.Model):
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
-    created_at db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
