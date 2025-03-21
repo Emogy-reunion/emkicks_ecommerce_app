@@ -20,7 +20,7 @@ def men_sneakers_preview():
     sneakers = Sneakers.query \
             .filter(Sneakers.category == 'men') \
             .order_by(Sneakers.id.desc()) \
-            .options(selectinload(Sneakers.images) \
+            .options(selectinload(Sneakers.images)) \
             .all()
     paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
@@ -63,10 +63,10 @@ def women_sneakers_preview():
     per_page = request.args.get('per_page', 15, type=int)
 
     sneakers = Sneakers.query \
-                     .filter(Sneakers.category == 'women') \
-                             .order_by(Sneakers.id.desc()) \
-                             .options(selectinload(Sneakers.images)) \
-                             .all()
+            .filter(Sneakers.category == 'women') \
+            .order_by(Sneakers.id.desc()) \
+            .options(selectinload(Sneakers.images)) \
+            .all()
     paginated_results = sneakers.paginate_results(page=page, per_page=per_page)
 
     if not paginated_results.items:
@@ -108,9 +108,9 @@ def kids_sneakers_preview():
     per_page = request.args.get('per_page', 15, type=int)
 
     sneakers = Sneakers.query \
-    .filter(Sneakers.category == 'kids') \
+            .filter(Sneakers.category == 'kids') \
             .order_by(Sneakers.id.desc()) \
-            .options(selectinload(Sneakers.images) \
+            .options(selectinload(Sneakers.images)) \
             .all()
     paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
@@ -124,7 +124,7 @@ def kids_sneakers_preview():
                     'price': item.final_price,
                     'original_price': item.original_price,
                     'discount': item.discount,
-                    'image': item.images[0].filename it item.images else None
+                    'image': item.images[0].filename if item.images else None
                     }
                 for item in paginated_results.items
                 ]
@@ -150,4 +150,34 @@ def jersey_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    jerseys = Jerseys.query.options(selectinload(Jerseys.images).
+    jerseys = Jerseys.query \
+            .options(selectinload(Jerseys.images)) \
+            .order_by(Jerseys.id.desc()).all()
+    paginated_results = jerseys.paginate_results(page=page, per_page=per_page)
+
+    if not paginated_results.items:
+         return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+     else:
+         jerseys = [
+                 {
+                     'name': item.name,
+                     'jersey_id': item.id,
+                     'price': item.fianal_price,
+                     'original_price': item.original_price,
+                     'discount': item.discount_rate,
+                     'image': item.images[0].filename if item.images else None
+                     }
+                 ]
+         response = {
+                 'jerseys': jerseys,
+                 'pagination': {
+                     'page': paginated_results.page,
+                     'per_page': paginated_results.per_page,
+                     'total': paginated_results.total,
+                     'pages': paginated_results.pages,
+                     'next': paginated_results.next_num if paginated_results.has_next,
+                     'previous': paginated_results.prev_num if paginated_results.has_prev
+                     }
+                 }
+         return jsonify(response), 200
+
