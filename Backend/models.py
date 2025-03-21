@@ -28,7 +28,7 @@ class Users(db.Model):
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
-    created_at db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
@@ -97,7 +97,7 @@ class Sneakers(db.Model):
         initializes the table with data
         '''
         self.name = name
-        self.original_price = original_ price
+        self.original_price = original_price
         self.discount_rate = discount_rate
         self.final_price = final_price
         self.size = size
@@ -134,7 +134,7 @@ class Jerseys(db.Model):
     jersey_type = db.Column(db.String(150), nullable=False)
     original_price = db.Column(db.Float, nullable=False)
     discount_rate = db.Column(db.Integer, default=0)
-    final_price = db.Column(db.Float, nullable=false)
+    final_price = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False)
     size = db.Column(db.String(50), nullable=False)
     season = db.Column(db.String(50), nullable=False)
