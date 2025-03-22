@@ -156,28 +156,28 @@ def jersey_preview():
     paginated_results = jerseys.paginate_results(page=page, per_page=per_page)
 
     if not paginated_results.items:
-         return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
-     else:
-         jerseys = [
-                 {
-                     'name': item.name,
-                     'jersey_id': item.id,
-                     'price': item.fianal_price,
-                     'original_price': item.original_price,
-                     'discount': item.discount_rate,
-                     'image': item.images[0].filename if item.images else None
-                     }
-                 ]
-         response = {
-                 'jerseys': jerseys,
-                 'pagination': {
-                     'page': paginated_results.page,
-                     'per_page': paginated_results.per_page,
-                     'total': paginated_results.total,
-                     'pages': paginated_results.pages,
-                     'next': paginated_results.next_num if paginated_results.has_next,
-                     'previous': paginated_results.prev_num if paginated_results.has_prev
-                     }
-                 }
-         return jsonify(response), 200
+        return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+    else:
+        jerseys = [
+                {
+                    'name': item.name,
+                    'jersey_id': item.id,
+                    'price': item.fianal_price,
+                    'original_price': item.original_price,
+                    'discount': item.discount_rate,
+                    'image': item.images[0].filename if item.images else None
+                    }
+                ]
+        response = {
+                'jerseys': jerseys,
+                'pagination': {
+                    'page': paginated_results.page,
+                    'per_page': paginated_results.per_page,
+                    'total': paginated_results.total,
+                    'pages': paginated_results.pages,
+                    'next': paginated_results.next_num if paginated_results.has_next,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev
+                    }
+                }
+        return jsonify(response), 200
 
