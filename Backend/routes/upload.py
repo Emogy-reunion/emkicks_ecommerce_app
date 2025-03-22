@@ -7,7 +7,7 @@ from utils.role import role_required
 from utils.discount import calculate_discount
 import os
 from models import Users, Sneakers, Images, db, Jerseys, JerseyImages
-from check_file_extension import allowed_extension
+from utils.check_file_extension import allowed_extension
 from werkzeug.utils import secure_filename
 
 post = Blueprint('post', __name__)
