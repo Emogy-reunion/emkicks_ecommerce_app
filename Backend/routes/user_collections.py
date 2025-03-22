@@ -98,7 +98,7 @@ def women_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.routes('/kids_sneakers_preview', methods=['GET'])
+@posts.route('/kids_sneakers_preview', methods=['GET'])
 def kids_sneakers_preview():
     '''
     retrieves the kids sneakers which will be displayed as preview
