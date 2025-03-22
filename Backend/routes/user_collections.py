@@ -2,7 +2,7 @@
 contain routes that fetch item collections from the database
 '''
 from flask import Blueprint, request, jsonify
-from model import db, Sneakers, Images
+from models import db, Sneakers, Images
 from sqlalchemy.orm import selectinload
 
 
@@ -98,7 +98,7 @@ def women_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.routes('/kids_sneakers_preview', methods=['GET'])
+@posts.route('/kids_sneakers_preview', methods=['GET'])
 def kids_sneakers_preview():
     '''
     retrieves the kids sneakers which will be displayed as preview
@@ -156,28 +156,28 @@ def jersey_preview():
     paginated_results = jerseys.paginate_results(page=page, per_page=per_page)
 
     if not paginated_results.items:
-         return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
-     else:
-         jerseys = [
-                 {
-                     'name': item.name,
-                     'jersey_id': item.id,
-                     'price': item.fianal_price,
-                     'original_price': item.original_price,
-                     'discount': item.discount_rate,
-                     'image': item.images[0].filename if item.images else None
-                     }
-                 ]
-         response = {
-                 'jerseys': jerseys,
-                 'pagination': {
-                     'page': paginated_results.page,
-                     'per_page': paginated_results.per_page,
-                     'total': paginated_results.total,
-                     'pages': paginated_results.pages,
-                     'next': paginated_results.next_num if paginated_results.has_next,
-                     'previous': paginated_results.prev_num if paginated_results.has_prev
-                     }
-                 }
-         return jsonify(response), 200
+        return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+    else:
+        jerseys = [
+                {
+                    'name': item.name,
+                    'jersey_id': item.id,
+                    'price': item.fianal_price,
+                    'original_price': item.original_price,
+                    'discount': item.discount_rate,
+                    'image': item.images[0].filename if item.images else None
+                    }
+                ]
+        response = {
+                'jerseys': jerseys,
+                'pagination': {
+                    'page': paginated_results.page,
+                    'per_page': paginated_results.per_page,
+                    'total': paginated_results.total,
+                    'pages': paginated_results.pages,
+                    'next': paginated_results.next_num if paginated_results.has_next else None,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev else None
+                    }
+                }
+        return jsonify(response), 200
 
