@@ -2,7 +2,7 @@
 contain routes that fetch item collections from the database
 '''
 from flask import Blueprint, request, jsonify
-from model import db, Sneakers, Images
+from models import db, Sneakers, Images
 from sqlalchemy.orm import selectinload
 
 
