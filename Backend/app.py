@@ -11,7 +11,7 @@ from utils.create_upload_folder import create_upload_folder
 from routes.verification import verify
 from routes.reset_password import reset
 from routes.upload import post
-from routes.collections import posts
+from routes.user_collections import posts
 
 
 app = create_app()
