@@ -6,7 +6,7 @@ from flask_jwt_extended import jwt_required
 from utils.role import role_required
 from utils.discount import calculate_discount
 import os
-from model import Users, Sneakers, Images, db, Jerseys, JerseyImages
+from models import Users, Sneakers, Images, db, Jerseys, JerseyImages
 from check_file_extension import allowed_extension
 from werkzeug.utils import secure_filename
 
