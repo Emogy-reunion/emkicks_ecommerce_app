@@ -175,8 +175,8 @@ def jersey_preview():
                     'per_page': paginated_results.per_page,
                     'total': paginated_results.total,
                     'pages': paginated_results.pages,
-                    'next': paginated_results.next_num if paginated_results.has_next,
-                    'previous': paginated_results.prev_num if paginated_results.has_prev
+                    'next': paginated_results.next_num if paginated_results.has_next else None,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev else None
                     }
                 }
         return jsonify(response), 200
