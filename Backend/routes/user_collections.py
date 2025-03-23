@@ -17,12 +17,17 @@ def men_sneakers_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    sneakers = Sneakers.query \
-            .filter(Sneakers.category == 'men') \
-            .order_by(Sneakers.id.desc()) \
-            .options(selectinload(Sneakers.images)) \
-            .all()
-    paginated_results = sneakers.paginate(page=page, per_page=per_page)
+    paginated_results = None
+
+    try:
+        sneakers = Sneakers.query \
+                .filter(Sneakers.category == 'men') \
+                .order_by(Sneakers.id.desc()) \
+                .options(selectinload(Sneakers.images)) \
+                .all()
+        paginated_results = sneakers.paginate(page=page, per_page=per_page)
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
     if not paginated_results.items:
         return jsonify({'error': 'No sneakers available at the moment. Stay tuned for new arrivals!'}), 404
