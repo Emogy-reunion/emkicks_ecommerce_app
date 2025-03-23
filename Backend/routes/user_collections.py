@@ -166,10 +166,15 @@ def jersey_preview():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
-    jerseys = Jerseys.query \
-            .options(selectinload(Jerseys.images)) \
-            .order_by(Jerseys.id.desc()).all()
-    paginated_results = jerseys.paginate_results(page=page, per_page=per_page)
+    paginated_results = None
+    
+    try:
+        jerseys = Jerseys.query \
+                .options(selectinload(Jerseys.images)) \
+                .order_by(Jerseys.id.desc()).all()
+        paginated_results = jerseys.paginate_results(page=page, per_page=per_page)
+    except Exception as e:
+        return jsonify({"error": 'An unexpected error occured. Please try again!'}), 500
 
     if not paginated_results.items:
         return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
