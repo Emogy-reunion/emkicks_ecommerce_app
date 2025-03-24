@@ -33,17 +33,17 @@ def sneaker_upload():
     final_price = original_price
 
     if discount_rate > 0:
-        final_price = calculate_discount(discount_rate=dicount_rate, original_price=original_price)
+        final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
     new_sneaker = Sneakers(name=name, original_price=original_price, size=size, 
                            discount_rate=discount_rate, final_price=final_price,
                            description=description, status=status, category=category)
     try:
         db.session.add(new_sneaker)
+        db.session.commit()
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-    db.session.commit()
 
     uploads = []
 
@@ -101,10 +101,10 @@ def jersey_upload():
 
     try:
         db.session.add(new_jersey)
+        db.session.commit()
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-    db.session.commit()
 
     uploads = []
 
