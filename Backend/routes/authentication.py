@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flasik import Blueprint, jsonify, request
 from models import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
@@ -38,8 +38,14 @@ def register():
     if errors:
         return jsonify({'errors': errors}), 400
 
-    user = Users.query.filter_by(email=email).first()
-    member = Users.query.filter_by(username=username).first()
+    user = None
+    member = None
+
+    try:
+        user = Users.query.filter_by(email=email).first()
+        member = Users.query.filter_by(username=username).first()
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
 
     if user:
         return jsonify({'error': 'An account associated with this email exists!'}), 409
@@ -72,12 +78,18 @@ def login():
     user = None
 
     if '@' in identifier:
-        user = Users.query.filter_by(email=identifier).first()
+        try:
+            user = Users.query.filter_by(email=identifier).first()
+        except Exception as e:
+             return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
         if not user:
             return jsonify({'error': 'The email you entered does not match any account!'}), 404
     else:
-        user = Users.query.filter_by(username=identifier).first()
+        try:
+            user = Users.query.filter_by(username=identifier).first()
+        except Exception as e:
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
         if not user:
             return jsonify({'error': 'The username you entered does not match any account!'}), 404
@@ -88,13 +100,16 @@ def login():
         if correct it creates and returns access token
         if incorrect it returns an error message
         '''
-        access_token = create_access_token(identity=user.id)
-        refresh_token = create_refresh_token(identity=user.id)
+        try:
+            access_token = create_access_token(identity=user.id)
+            refresh_token = create_refresh_token(identity=user.id)
 
-        response = jsonify({'success': ' Successfully logged in!'}), 200
-        set_access_cookies(response, access_token)
-        set_refresh_cookies(response, refresh_token)
-        return response
+            response = jsonify({'success': ' Successfully logged in!'}), 200
+            set_access_cookies(response, access_token)
+            set_refresh_cookies(response, refresh_token)
+            return response
+        except Exception as e:
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
     else:
         return jsonify({'error': 'Incorrect password. Please try again!'}), 401
 
