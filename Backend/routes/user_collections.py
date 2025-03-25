@@ -203,7 +203,7 @@ def jersey_preview():
         return jsonify(response), 200
 
 
-@posts.route('/user_sneaker_details/<int:sneaker_id', methods=['GET'])
+@posts.route('/user_sneaker_details/<int:sneaker_id>', methods=['GET'])
 def user_sneaker_details(sneaker_id):
     '''
     retrieves details about the user sneakers
