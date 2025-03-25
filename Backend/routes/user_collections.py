@@ -183,7 +183,7 @@ def jersey_preview():
                 {
                     'name': item.name,
                     'jersey_id': item.id,
-                    'price': item.fianal_price,
+                    'price': item.final_price,
                     'original_price': item.original_price,
                     'discount': item.discount_rate,
                     'image': item.images[0].filename if item.images else None
@@ -201,4 +201,65 @@ def jersey_preview():
                     }
                 }
         return jsonify(response), 200
+
+
+@posts.route('/user_sneaker_details/<int:sneaker_id>', methods=['GET'])
+def user_sneaker_details(sneaker_id):
+    '''
+    retrieves details about the user sneakers
+    '''
+    sneaker = None
+    try:
+        sneaker = db.session.get(Sneakers, sneaker_id).first()
+    except Exception as e:
+        return jsonify({"error": 'An unexpected error occured. Please try again1'}), 500
+
+    if not sneaker:
+        return jsonify({'error': 'Sneaker not found!'}), 404
+
+    details = {
+                'name': sneaker.name,
+                'sneaker_id': sneaker.id,
+                'price': sneaker.final_price,
+                'discount_rate': sneaker.discount_rate,
+                'original_price': sneaker.original_price,
+                'size': sneaker.size,
+                'status': sneaker.status,
+                'description': sneaker.description,
+                'category': sneaker.category,
+                'posted_at': sneaker.posted_at,
+                'images': [image.filename for image in sneaker.images] if sneaker.images else None
+                }
+    return jsonify({'details': details}), 200
+
+@posts.route('/user_jersey_details/<int:jersery_id>', methods=['GET'])
+def user_jersey_details(jersey_id):
+    '''
+    retrieve details about a specific jersey
+    '''
+    jersey = None
+
+    try:
+        jersey = db.session.get(Jerseys, jersey_id).first()
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    if not jersey:
+        return jsonify({'error': 'Jersey not found!'}), 404
+
+    details = {
+            'jersey_id': jersey.id,
+            'name': jersey.name,
+            'jersey_type': jersey.jersey_type,
+            'price': jersey.final_price,
+            'discount_rate': jersey.discount_rate,
+            'original_price': jersey.original_price,
+            'size': jersey.size,
+            'status': jersey.status,
+            'season': jersey.season,
+            'description': jersey.description,
+            'posted_at': jersey.posted_at,
+            'images': [image.filename for image in jersey.images] if jersey.images else None
+            }
+    return jsonify({'details': details}), 200
 
