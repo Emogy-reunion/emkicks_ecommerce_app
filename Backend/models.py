@@ -88,10 +88,11 @@ class Sneakers(db.Model):
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
+    brand = db.Column(db.String(50), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, original_price, discount_rate,
+    def __init__(self, name, original_price, discount_rate, brand=brand,
                  final_price, size, status, description, category):
         '''
         initializes the table with data
@@ -104,6 +105,7 @@ class Sneakers(db.Model):
         self.status = status
         self.description = description
         self.category = category
+        self.brand = brand
 
 class Images(db.Model):
     '''
