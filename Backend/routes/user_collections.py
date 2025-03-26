@@ -227,6 +227,7 @@ def user_sneaker_details(sneaker_id):
                 'status': sneaker.status,
                 'description': sneaker.description,
                 'category': sneaker.category,
+                'brand': sneaker.brand,
                 'posted_at': sneaker.posted_at,
                 'images': [image.filename for image in sneaker.images] if sneaker.images else None
                 }
