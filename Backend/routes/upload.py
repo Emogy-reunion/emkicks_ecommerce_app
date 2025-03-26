@@ -30,15 +30,16 @@ def sneaker_upload():
     description = data['description']
     status = data['status'].lower()
     category = data['category'].lower()
+    brand = data['brand'].lower()
     final_price = original_price
 
     if discount_rate > 0:
         final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
-    new_sneaker = Sneakers(name=name, original_price=original_price, size=size, 
-                           discount_rate=discount_rate, final_price=final_price,
-                           description=description, status=status, category=category)
     try:
+        new_sneaker = Sneakers(name=name, original_price=original_price, size=size, brand=brand,
+                               discount_rate=discount_rate, final_price=final_price,
+                               description=description, status=status, category=category)
         db.session.add(new_sneaker)
         db.session.commit()
     except Exception as e:
