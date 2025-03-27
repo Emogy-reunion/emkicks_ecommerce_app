@@ -5,7 +5,7 @@ from flask import request, jsonify
 from routes.user_collections import posts
 from flask_jwt_extended import jwt_required
 from utils.role import role_required
-from models import Sneakers, Images
+from models import Sneakers, Images, Jerseys, JerseyImages
 from sqlalchemy.orm import selectinload
 
 @jwt_required()
@@ -154,3 +154,52 @@ def member_kids_sneakers_preview():
                     }
                 }
         return jsonify(response), 200
+
+@jwt_required()
+@post.route('/member_jerseys_preview', methods=['GET'])
+def member_jerseys_preview():
+    '''
+    retrieves the jerseys previews for logged in users
+    '''
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 15, type=int)
+
+    paginated_results = None
+
+    try:
+        jerseys = Jerseys.query\
+                .order_by(Jerseys.id.desc())\
+                .options(selectionload(Jerseys.images))\
+                .all()
+        paginated_results = jerseys.paginate(page=page, per_page=per_page)
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    if not paginated_results.items:
+        return jsonify({'error': 'No jersey available at the moment. Stay tuned for new arrivals!'}), 404
+    else:
+        jerseys = [
+                {
+                    'name': jersey.name,
+                    'jersey_id': jersey.id,
+                    'price': jersey.final_price,
+                    'discount': jersey.discount_rate,
+                    'original_price': jersey.original_price,
+                    'status': jersey.status,
+                    'images': jersey.images[0].filename if jersey.images else None
+                    }
+                for jersey in paginated_results.items
+                ]
+        response = {
+                'jerseys': jerseys,
+                'pagination': {
+                    'page': paginated_results.page,
+                    'per_page': paginated_results.per_page,
+                    'pages': paginated_results.pages,
+                    'total': paginated_results.total,
+                    'next': paginated_results.next_num if paginated_results.has_next else None,
+                    'previous': paginated_results.prev_num if paginated_results.has_prev else None
+                    }
+                }
+        return jsonify(response)
+
