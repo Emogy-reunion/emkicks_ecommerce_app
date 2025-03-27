@@ -8,8 +8,8 @@ from sqlalchemy.orm import selectinload
 
 posts = Blueprint('posts', __name__)
 
-@posts.route('/men_sneakers_preview', methods=['GET'])
-def men_sneakers_preview():
+@posts.route('/user_men_sneakers_preview', methods=['GET'])
+def user_men_sneakers_preview():
     '''
     retrieve the men's sneakers for preview display
     returns paginated results
@@ -59,8 +59,8 @@ def men_sneakers_preview():
         return jsonify(response), 200
 
 
-@posts.route('/women_sneaker_preview', methods=['GET'])
-def women_sneakers_preview():
+@posts.route('/user_women_sneaker_preview', methods=['GET'])
+def user_women_sneakers_preview():
     '''
     retrieves the preview for the women's sneakers
     '''
@@ -108,8 +108,8 @@ def women_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.route('/kids_sneakers_preview', methods=['GET'])
-def kids_sneakers_preview():
+@posts.route('/user_kids_sneakers_preview', methods=['GET'])
+def user_kids_sneakers_preview():
     '''
     retrieves the kids sneakers which will be displayed as preview
     returns the paginated results
@@ -157,8 +157,8 @@ def kids_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.route('/jersey_preview', methods=['GET'])
-def jersey_preview():
+@posts.route('/user_jersey_preview', methods=['GET'])
+def user_jersey_preview():
     '''
     retrieves the jersey details which will be displayed as a preview
     returns paginated results
