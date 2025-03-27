@@ -9,7 +9,6 @@ from models import Sneakers, Images
 from sqlalchemy.orm import selectinload
 
 @jwt_required()
-@role_required('admin')
 @posts.route('/member_men_sneaker_preview', methods=['GET'])
 def member_men_sneakers_preview():
     '''
@@ -19,7 +18,7 @@ def member_men_sneakers_preview():
     per_page = request.args.get('per_page', 15, type=int)
 
     paginated_results = None
-    
+
     try:
         sneakers = Sneakers.query\
                 .filter(Sneakers.name == 'men')\
@@ -58,4 +57,3 @@ def member_men_sneakers_preview():
                     }
                 }
         return jsonify(response), 200
-
