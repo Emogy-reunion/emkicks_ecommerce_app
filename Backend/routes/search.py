@@ -154,8 +154,8 @@ def user_jerseys_search():
                             'per_page': paginated_results.per_page,
                             'pages': paginated_results.pages,
                             'total': paginated_results.total,
-                            'next': paginated_results.next_num if paginated_results.has_next,
-                            'previous': paginated_results.prev_num if paginated_results.has_prev
+                            'next': paginated_results.next_num if paginated_results.has_next else None,
+                            'previous': paginated_results.prev_num if paginated_results.has_prev else None
                             }
                         }
                 return jsonify(response)
