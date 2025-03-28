@@ -92,7 +92,7 @@ class Sneakers(db.Model):
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
 
-    def __init__(self, name, original_price, discount_rate, brand=brand,
+    def __init__(self, name, original_price, discount_rate, brand,
                  final_price, size, status, description, category):
         '''
         initializes the table with data
