@@ -203,3 +203,33 @@ def member_jerseys_preview():
                 }
         return jsonify(response)
 
+@jwt_required()
+@post.route('/member_sneaker_details/<int:sneaker_id>', methods=['GET'])
+def member_sneaker_details(sneaker_id):
+    '''
+    retrieves the sneaker details from the database
+    '''
+    sneaker = None
+    try:
+        sneaker = db.session.get(Sneakers, sneaker_id).options(selectinload(Sneakers.images))
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    if not sneaker:
+        return jsonify({"error": 'Sneaker not found!'}), 404
+    else:
+        sneaker_details = {
+                'name': sneaker.name,
+                'sneaker_id': sneaker.id,
+                'price': sneaker.final_price,
+                'discount': sneaker.discount_rate,
+                'original_price': sneaker.original_price,
+                'status': sneaker.status,
+                'category': sneaker.category,
+                'description': sneaker.description,
+                'brand': sneaker.brand,
+                'status': sneaker.status,
+                'images': [image.filename for image in sneaker.images] if sneaker.images else None
+                }
+        return jsonify(sneaker_details), 200
+
