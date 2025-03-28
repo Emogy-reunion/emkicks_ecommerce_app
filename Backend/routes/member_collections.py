@@ -5,7 +5,7 @@ from flask import request, jsonify
 from routes.user_collections import posts
 from flask_jwt_extended import jwt_required
 from utils.role import role_required
-from models import Sneakers, Images, Jerseys, JerseyImages
+from models import Sneakers, Images, db, Jerseys, JerseyImages
 from sqlalchemy.orm import selectinload
 
 @jwt_required()
@@ -186,6 +186,7 @@ def member_jerseys_preview():
                     'discount': jersey.discount_rate,
                     'original_price': jersey.original_price,
                     'status': jersey.status,
+                    'season': jersey.season,
                     'images': jersey.images[0].filename if jersey.images else None
                     }
                 for jersey in paginated_results.items
@@ -203,3 +204,64 @@ def member_jerseys_preview():
                 }
         return jsonify(response)
 
+@jwt_required()
+@post.route('/member_sneaker_details/<int:sneaker_id>', methods=['GET'])
+def member_sneaker_details(sneaker_id):
+    '''
+    retrieves the sneaker details from the database
+    '''
+    sneaker = None
+    try:
+        sneaker = db.session.get(Sneakers, sneaker_id).options(selectinload(Sneakers.images))
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    if not sneaker:
+        return jsonify({"error": 'Sneaker not found!'}), 404
+    else:
+        sneaker_details = {
+                'name': sneaker.name,
+                'sneaker_id': sneaker.id,
+                'price': sneaker.final_price,
+                'discount': sneaker.discount_rate,
+                'original_price': sneaker.original_price,
+                'status': sneaker.status,
+                'size': sneaker.size,
+                'category': sneaker.category,
+                'description': sneaker.description,
+                'brand': sneaker.brand,
+                'status': sneaker.status,
+                'images': [image.filename for image in sneaker.images] if sneaker.images else None
+                }
+        return jsonify(sneaker_details), 200
+
+@jwt_required()
+@posts.route('/member_jersey_details/<int:jersey_id>', methods=['GET'])
+def member_jersey_details(jersey_id):
+    '''
+    retrieves jersey details for logged in users
+    '''
+    jersey = None
+
+    try:
+        jersey = db.session.get(Jerseys, jersey_id).options(selectionload(Sneakers.images))
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    if not jersey:
+        return jsonify({"error": 'Jersey not found!'}), 404
+    else:
+        jersey_details = {
+                'name': jersey.name,
+                'jersey_id': jersey.id,
+                'price': jersey.final_price,
+                'discount': jersey.discount_rate,
+                'original_price': jersey.original_price,
+                'status': jersey.status,
+                'season': jersey.season,
+                'jersey_type': jersey.jersey_type,
+                'size': jersey.size,
+                'description': jersey.description,
+                'images': [image.filename for image in jersey.images] if jersey.images else None
+                }
+        return jsonify(jersey_details), 200
