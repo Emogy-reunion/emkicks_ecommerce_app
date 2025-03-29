@@ -22,7 +22,7 @@ def sneaker_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    data = request.json
+    data = request.form
     name = data['name'].lower()
     original_price = float(data['original_price'])
     discount_rate = int(data['discount_rate'])
@@ -82,7 +82,7 @@ def jersey_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    data = request.json
+    data = request.form
     name = data['name'].lower()
     jersey_type = data['jersey_type'].lower()
     original_price = float(data['original_price'])

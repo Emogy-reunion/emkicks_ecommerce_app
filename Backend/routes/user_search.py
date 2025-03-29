@@ -26,6 +26,9 @@ def user_sneakers_search():
     try:
         sneakers = Sneakers.query.options(selectionload(Sneakers.images))
 
+        if category:
+            sneakers = sneakers.filter(Sneakers.category.ilike(f'%{name}%'))
+
         if not sneakers:
             return jsonify({'error': 'No sneakers available at the moment. Stay tuned for new arrivals!'}), 404
 
@@ -41,9 +44,6 @@ def user_sneakers_search():
             if maximum_price <= 0:
                 return jsonify({'error': 'Maximum price cannot be less than or equal to zero'}), 400
             sneakers = sneakers.query.filter(Sneakers.final_price <= maximum_price)
-
-        if category:
-            sneakers = sneakers.query.filter(Sneakers.category.ilike(f'%{category}%'))
 
         if size is not None:
             if size <= 0:
