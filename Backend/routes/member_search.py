@@ -7,7 +7,7 @@ from flask import request, jsonify
 from sqlalchemy.orm import selectinload
 from flask_jwt_extended import jwt_required
 
-
+@jwt_required()
 @find.route('/member_sneaker_search', methods=['GET']\)
 def member_sneaker_search():
     '''
@@ -52,6 +52,9 @@ def member_sneaker_search():
                 return jsonify({'error': 'Size cannot be less than 35!'}), 400
             sneakers = sneakers.filter(Sneakers.size == size)
 
+        if brand:
+            sneakers = sneakers.filter(Sneakers.brand.ilike(f'%{brand}%'))
+
         paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
         if not paginated_results.items:
@@ -83,6 +86,18 @@ def member_sneaker_search():
             return jsonify(response), 200
 
 
+@jwt_required()
+@find.route('/member_jersey_search', methods['GET'])
+def member_jersey_search():
+    '''
+   allows logged in users to filter jerseys
+   '''
+   name = request.args.get('name').lower()
+   maximum_price = float(request.args.get('maximum_price'))
+   minimum_price = float(request.args.get('minimum_price'))
+   size = request.args.get('size').lower()
+   season = request.args.get('season').lower()
+   jersey_type = request.args.get('jersey_type').lower()
 
 
 
