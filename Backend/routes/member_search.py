@@ -52,6 +52,9 @@ def member_sneaker_search():
                 return jsonify({'error': 'Size cannot be less than 35!'}), 400
             sneakers = sneakers.filter(Sneakers.size == size)
 
+        if brand:
+            sneakers = sneakers.filter(Sneakers.brand.ilike(f'%{brand}%'))
+
         paginated_results = sneakers.paginate(page=page, per_page=per_page)
 
         if not paginated_results.items:
