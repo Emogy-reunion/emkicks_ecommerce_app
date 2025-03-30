@@ -84,6 +84,8 @@ def member_sneaker_search():
                         }
                     }
             return jsonify(response), 200
+        except Exception as e:
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
 @jwt_required()
