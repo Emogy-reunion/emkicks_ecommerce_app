@@ -1,14 +1,16 @@
 '''
 contains products filtering routes for logged in users
 '''
-from routes.user_search import find
 from models import Sneakers, Images, Jerseys, JerseyImages
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from sqlalchemy.orm import selectinload
 from flask_jwt_extended import jwt_required
 
+
+member_search_bp = Blueprint('member_search_bp', __name__)
+
 @jwt_required()
-@find.route('/member_sneaker_search', methods=['GET']\)
+@member_search_bp.route('/member_sneaker_search', methods=['GET'])
 def member_sneaker_search():
     '''
     allows user to filter sneakers
@@ -89,7 +91,7 @@ def member_sneaker_search():
 
 
 @jwt_required()
-@find.route('/member_jersey_search', methods['GET'])
+@member_search_bp.route('/member_jersey_search', methods['GET'])
 def member_jersey_search():
     '''
    allows logged in users to filter jerseys
