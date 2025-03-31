@@ -2,6 +2,7 @@
 initializes the libraries
 creates initial admins
 runs the application
+registers the blueprints
 '''
 from create_app import create_app
 from routes.authentication import auth
@@ -11,8 +12,10 @@ from utils.create_upload_folder import create_upload_folder
 from routes.verification import verify
 from routes.reset_password import reset
 from routes.upload import post
-from routes.search import find
-from routes.user_collections import posts
+from routes.user_search import user_search_bp
+from routes.member_search import member_search_bp
+from routes.user_collections import user_posts_bp
+from routes.member_collections import member_posts_bp
 
 
 
@@ -23,8 +26,10 @@ app.register_blueprint(auth)
 app.register_blueprint(verify)
 app.register_blueprint(reset)
 app.register_blueprint(post)
-app.register_blueprint(posts)
-app.register_blueprint(find)
+app.register_blueprint(user_posts_bp)
+app.register_blueprint(member_posts_bp)
+app.register_blueprint(user_search_bp)
+app.register_blueprint(member_search_bp)
 
 create_upload_folder()
 
