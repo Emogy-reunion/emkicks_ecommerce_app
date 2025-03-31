@@ -12,7 +12,8 @@ from utils.create_upload_folder import create_upload_folder
 from routes.verification import verify
 from routes.reset_password import reset
 from routes.upload import post
-from routes.user_search import find
+from routes.user_search import user_search_bp
+from routes.member_search import member_search_bp
 from routes.user_collections import posts
 
 
@@ -25,7 +26,8 @@ app.register_blueprint(verify)
 app.register_blueprint(reset)
 app.register_blueprint(post)
 app.register_blueprint(posts)
-app.register_blueprint(find)
+app.register_blueprint(user_search_bp)
+app.register_blueprint(member_search_bp)
 
 create_upload_folder()
 
