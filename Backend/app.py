@@ -2,6 +2,7 @@
 initializes the libraries
 creates initial admins
 runs the application
+registers the blueprints
 '''
 from create_app import create_app
 from routes.authentication import auth
