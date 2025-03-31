@@ -11,7 +11,7 @@ from utils.create_upload_folder import create_upload_folder
 from routes.verification import verify
 from routes.reset_password import reset
 from routes.upload import post
-from routes.search import find
+from routes.user_search import find
 from routes.user_collections import posts
 
 
