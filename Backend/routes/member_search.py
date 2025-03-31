@@ -86,12 +86,12 @@ def member_sneaker_search():
                         }
                     }
             return jsonify(response), 200
-        except Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 @jwt_required()
-@member_search_bp.route('/member_jersey_search', methods['GET'])
+@member_search_bp.route('/member_jersey_search', methods=['GET'])
 def member_jersey_search():
     '''
    allows logged in users to filter jerseys
@@ -118,7 +118,7 @@ def member_jersey_search():
         if maximum_price is not None:
             if maximum_price <= 0:
                 return jsonify({"error": 'Maximum price cannot be less than or equal to zero!'}), 400
-            jerseys = jersers.filter(Jerseys.final_price <= maximum_price)
+            jerseys = jerseys.filter(Jerseys.final_price <= maximum_price)
 
         if minimum_price is not None:
             if minimum_price < 0:
@@ -151,6 +151,7 @@ def member_jersey_search():
                         }
                     for jersey in paginated_results.items
                     }
+
             response = {
                     'jerseys': jerseys,
                     'pagination': {
@@ -163,5 +164,5 @@ def member_jersey_search():
                         }
                     }
             return jsonify(response), 200
-        except  Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+     except  Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
