@@ -5,9 +5,9 @@ from flask import Blueprint, jsonify, request
 from models import Sneakers, Images
 from sqlalchemy.orm import selectinload
 
-find = Blueprint('find', __name__)
+user_search_bp = Blueprint('user_search_bp', __name__)
 
-@find.route('/user_sneakers_search', methods=['GET'])
+@user_search_bp.route('/user_sneakers_search', methods=['GET'])
 def user_sneakers_search():
     '''
     allows user to filter sneakers
@@ -85,7 +85,7 @@ def user_sneakers_search():
     except Exception as e:
         return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
 
-@find.route('/user_jerseys_search', methods=['GET'])
+@user_search_bp.route('/user_jerseys_search', methods=['GET'])
 def user_jerseys_search():
     '''
     allows users to filter jerseys according to certain criteria
