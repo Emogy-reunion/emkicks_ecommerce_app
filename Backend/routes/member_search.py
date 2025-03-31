@@ -89,7 +89,6 @@ def member_sneaker_search():
     except Exception as e:
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-
 @jwt_required()
 @member_search_bp.route('/member_jersey_search', methods['GET'])
 def member_jersey_search():
@@ -163,5 +162,5 @@ def member_jersey_search():
                         }
                     }
             return jsonify(response), 200
-        except  Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+     except  Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
