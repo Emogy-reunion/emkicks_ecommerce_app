@@ -90,30 +90,31 @@ def member_sneaker_search():
     except Exception as e:
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
+
 @jwt_required()
 @member_search_bp.route('/member_jersey_search', methods=['GET'])
 def member_jersey_search():
     '''
-   allows logged in users to filter jerseys
-   '''
-   name = request.args.get('name').lower()
-   maximum_price = float(request.args.get('maximum_price'))
-   minimum_price = float(request.args.get('minimum_price'))
-   size = request.args.get('size').lower()
-   season = request.args.get('season').lower()
-   jersey_type = request.args.get('jersey_type').lower()
+    allows logged in users to filter jerseys
+    '''
+    name = request.args.get('name').lower()
+    maximum_price = float(request.args.get('maximum_price'))
+    minimum_price = float(request.args.get('minimum_price'))
+    size = request.args.get('size').lower()
+    season = request.args.get('season').lower()
+    jersey_type = request.args.get('jersey_type').lower()
 
-   page = request.args.get('page', 1, type=int)
-   per_page  = request.args.get('per_page', 15, type=int)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 15, type=int)
 
-   try:
-       jerseys = Jerseys.query.options(selectinload(Jerseys.images))
+    try:
+        jerseys = Jerseys.query.options(selectinload(Jerseys.images))
 
-       if not jerseys:
-           return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+        if not jerseys:
+            return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
 
-       if name:
-           jerseys = jerseys.filter(Jerseys.name.ilike(f'%{name}%'))
+        if name:
+            jerseys = jerseys.filter(Jerseys.name.ilike(f'%{name}%'))
 
         if maximum_price is not None:
             if maximum_price <= 0:
@@ -150,7 +151,7 @@ def member_jersey_search():
                         'image': jersey.images[0].filename if jersey.images else None
                         }
                     for jersey in paginated_results.items
-                    }
+                    ]
 
             response = {
                     'jerseys': jerseys,
@@ -164,5 +165,5 @@ def member_jersey_search():
                         }
                     }
             return jsonify(response), 200
-     except  Exception as e:
+    except Exception as e:
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500

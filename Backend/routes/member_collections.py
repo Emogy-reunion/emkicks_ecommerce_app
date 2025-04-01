@@ -39,7 +39,7 @@ def member_men_sneakers_preview():
                     'name': sneaker.name,
                     'sneaker_id': sneaker.id,
                     'price': sneaker.final_price,
-                    'discount': sneaker.discount_rate.
+                    'discount': sneaker.discount_rate,
                     'original_price': sneaker.original_price,
                     'status': sneaker.status,
                     'image': sneaker.images[0].filename if sneaker.images else None
@@ -61,7 +61,7 @@ def member_men_sneakers_preview():
         return jsonify(response), 200
 
 @jwt_required()
-@member_posts_bp.route('/member_women_sneaker_preview', method=['GET'])
+@member_posts_bp.route('/member_women_sneaker_preview', methods=['GET'])
 def member_women_sneakers_preview():
     '''
     retrieves women sneaker previews for logged in users
@@ -130,7 +130,7 @@ def member_kids_sneakers_preview():
         return jsonify({"error": 'An unexpected error occured. Please try again!'}), 500
 
     if not paginated_results.items:
-        return jsonify("error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
+        return jsonify({"error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
     else:
         sneakers = [
                 {
