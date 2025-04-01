@@ -30,7 +30,7 @@ class Users(db.Model):
     verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     sneakers = db.relationship('Sneakers', back_populates='user', lazy='select', cascade='all, delete-orphan')
-    jerseys = db.relationship('Jerseys', back_populates='user', lazy='select', cascde='all, delete-orphan')
+    jerseys = db.relationship('Jerseys', back_populates='user', lazy='select', cascade='all, delete-orphan')
     cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan', lazy='select')
 
 
