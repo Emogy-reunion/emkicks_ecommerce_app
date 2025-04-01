@@ -177,3 +177,10 @@ class JerseyImages(db.Model):
         self.jersey_id = jersey_id
         self.filename = filename
 
+
+class Cart(db.Model):
+    '''
+    the users cart
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
