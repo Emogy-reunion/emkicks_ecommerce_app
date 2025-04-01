@@ -29,6 +29,7 @@ class Users(db.Model):
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    sneakers = db.relationship('Sneakers', back_populates='user', lazy='select', cascade='all, delete-orphan')
     cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan', lazy='select')
 
 
@@ -83,6 +84,7 @@ class Sneakers(db.Model):
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     name = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     original_price = db.Column(db.Float, nullable=False)
     discount_rate = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Float, nullable=False)
@@ -92,6 +94,7 @@ class Sneakers(db.Model):
     category = db.Column(db.String(50), nullable=False)
     brand = db.Column(db.String(50), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('Users', back_populates='sneakers', lazy='select', cascade='all, delete-orphan')
     images = db.relationship('Images', back_populates='sneaker', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, name, original_price, discount_rate, brand,
