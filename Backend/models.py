@@ -29,7 +29,7 @@ class Users(db.Model):
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan')
+    cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan', lazy='select')
 
 
     def __init__(firstname, lastname, email, username, phone, password):
@@ -92,7 +92,7 @@ class Sneakers(db.Model):
     category = db.Column(db.String(50), nullable=False)
     brand = db.Column(db.String(50), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
-    images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
+    images = db.relationship('Images', back_populates='sneaker', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, name, original_price, discount_rate, brand,
                  final_price, size, status, description, category):
@@ -144,7 +144,7 @@ class Jerseys(db.Model):
     season = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
-    images = db.relationship('JerseyImages', back_populates='jersey', lazy=True, cascade='all, delete-orphan')
+    images = db.relationship('JerseyImages', back_populates='jersey', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, name, jersey_type, original_price, discount_rate,
                  final_price, season, status, size, description):
