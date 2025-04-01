@@ -39,7 +39,7 @@ def member_men_sneakers_preview():
                     'name': sneaker.name,
                     'sneaker_id': sneaker.id,
                     'price': sneaker.final_price,
-                    'discount': sneaker.discount_rate.
+                    'discount': sneaker.discount_rate,
                     'original_price': sneaker.original_price,
                     'status': sneaker.status,
                     'image': sneaker.images[0].filename if sneaker.images else None
