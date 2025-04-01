@@ -130,7 +130,7 @@ def member_kids_sneakers_preview():
         return jsonify({"error": 'An unexpected error occured. Please try again!'}), 500
 
     if not paginated_results.items:
-        return jsonify("error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
+        return jsonify({"error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
     else:
         sneakers = [
                 {
