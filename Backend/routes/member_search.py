@@ -151,7 +151,7 @@ def member_jersey_search():
                         'image': jersey.images[0].filename if jersey.images else None
                         }
                     for jersey in paginated_results.items
-                    }
+                    ]
 
             response = {
                     'jerseys': jerseys,
