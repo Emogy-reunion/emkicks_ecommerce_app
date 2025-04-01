@@ -91,6 +91,7 @@ class Sneakers(db.Model):
     brand = db.Column(db.String(50), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
+    cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan')
 
     def __init__(self, name, original_price, discount_rate, brand,
                  final_price, size, status, description, category):
@@ -183,4 +184,6 @@ class Cart(db.Model):
     the users cart
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('Users', back_populates='cart')
