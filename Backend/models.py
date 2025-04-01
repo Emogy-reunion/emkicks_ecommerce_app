@@ -99,11 +99,12 @@ class Sneakers(db.Model):
     images = db.relationship('Images', back_populates='sneaker', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, name, original_price, discount_rate, brand,
-                 final_price, size, status, description, category):
+                 user_id, final_price, size, status, description, category):
         '''
         initializes the table with data
         '''
         self.name = name
+        self.user_id = user_id
         self.original_price = original_price
         self.discount_rate = discount_rate
         self.final_price = final_price
@@ -153,11 +154,12 @@ class Jerseys(db.Model):
     images = db.relationship('JerseyImages', back_populates='jersey', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, name, jersey_type, original_price, discount_rate,
-                 final_price, season, status, size, description):
+                 user_id, final_price, season, status, size, description):
         '''
         initializes the table with data
         '''
         self.name = name
+        self.user_id = user_id
         self.jersey_type = jersey_type
         self.original_price = original_price
         self.discount_rate = discount_rate
@@ -194,3 +196,9 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('Users', back_populates='cart')
+
+    def __init__(self, user_id):
+        '''
+        initializes the cart with data
+        '''
+        self.user_id = user_id
