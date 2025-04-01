@@ -61,7 +61,7 @@ def member_men_sneakers_preview():
         return jsonify(response), 200
 
 @jwt_required()
-@member_posts_bp.route('/member_women_sneaker_preview', method=['GET'])
+@member_posts_bp.route('/member_women_sneaker_preview', methods=['GET'])
 def member_women_sneakers_preview():
     '''
     retrieves women sneaker previews for logged in users
