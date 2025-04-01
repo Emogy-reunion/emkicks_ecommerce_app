@@ -29,6 +29,8 @@ class Users(db.Model):
     role = db.Column(db.String(50), default='guest')
     verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan')
+
 
     def __init__(firstname, lastname, email, username, phone, password):
         '''
@@ -91,7 +93,6 @@ class Sneakers(db.Model):
     brand = db.Column(db.String(50), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
     images = db.relationship('Images', back_populates='sneaker', lazy=True, cascade='all, delete-orphan')
-    cart = db.relationship('Cart', back_populates='user', uselist=False, cascade='all, delete-orphan')
 
     def __init__(self, name, original_price, discount_rate, brand,
                  final_price, size, status, description, category):
