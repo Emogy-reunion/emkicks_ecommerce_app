@@ -17,7 +17,7 @@ serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 class Users(db.Model):
     '''
-    stores user information
+    stores user information about a specific user
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     firstname = db.Column(db.String(50), nullable=False)
