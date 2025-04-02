@@ -16,7 +16,7 @@ def user_sneakers_search():
     minimum_price = request.args.get('minimum_price', type=float)
     maximum_price = request.args.get('maximum_price', type=float)
     category = request.args.get('category').lower()
-    size = request.args.get('size', type=int)
+    size = request.args.get('size')
     brand = request.args.get('brand').lower()
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
