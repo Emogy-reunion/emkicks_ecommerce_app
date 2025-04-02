@@ -18,7 +18,7 @@ def member_sneaker_search():
     name = request.args.get('name').lower()
     maximum_price = float(request.args.get('maximum_price'))
     minimum_price = float(request.args.get('mimimum_price'))
-    size = int(request.args.get('size'))
+    size = request.args.get('size')
     brand = request.args.get('brand').lower()
     category = request.args.get('category').lower()
 
