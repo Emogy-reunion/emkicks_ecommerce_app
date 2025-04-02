@@ -26,7 +26,7 @@ def sneaker_upload():
     name = data['name'].lower()
     original_price = float(data['original_price'])
     discount_rate = int(data['discount_rate'])
-    size = int(data['size'])
+    size = data['size']
     description = data['description']
     status = data['status'].lower()
     category = data['category'].lower()
