@@ -178,7 +178,7 @@ class JerseyImages(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     jersey_id = db.Column(db.Integer, db.ForeignKey('jerseys.id'), nullable=False)
     filename = db.Column(db.String(200), nullable=False)
-    jersey = db.relationship('Jerseys', back_populates='images', lazy=True)
+    jersey = db.relationship('Jerseys', back_populates='images')
 
     def __init__(self, jersey_id, filename):
         '''
@@ -196,6 +196,7 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('Users', back_populates='cart')
+    cart_items = db.relationship('CartItems', back_ref='cart', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, user_id):
         '''
