@@ -89,7 +89,7 @@ class Sneakers(db.Model):
     original_price = db.Column(db.Float, nullable=False)
     discount_rate = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Float, nullable=False)
-    size = db.Column(db.String(20), nullable=False)
+    size = db.Column(db.iString(20), nullable=False)
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
@@ -202,3 +202,10 @@ class Cart(db.Model):
         initializes the cart with data
         '''
         self.user_id = user_id
+
+class CartItems(db.model):
+    '''
+    stores the cart items
+    '''
+    id = db.Column(db.Integer, primary_key=True, nullable=false)
+    cart_id = db.Column(db.Integer,db.ForeignKey('cart.id'), nullable=False)
