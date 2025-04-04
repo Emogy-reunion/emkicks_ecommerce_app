@@ -89,7 +89,7 @@ class Sneakers(db.Model):
     original_price = db.Column(db.Float, nullable=False)
     discount_rate = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Float, nullable=False)
-    size = db.Column(db.iString(20), nullable=False)
+    size = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=False)
@@ -196,7 +196,7 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('Users', back_populates='cart')
-    cart_items = db.relationship('CartItems', back_ref='cart', lazy='select', cascade='all, delete-orphan')
+    cart_items = db.relationship('CartItems', backref='cart', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, user_id):
         '''
@@ -204,9 +204,9 @@ class Cart(db.Model):
         '''
         self.user_id = user_id
 
-class CartItems(db.model):
+class CartItems(db.Model):
     '''
     stores the cart items
     '''
-    id = db.Column(db.Integer, primary_key=True, nullable=false)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     cart_id = db.Column(db.Integer,db.ForeignKey('cart.id'), nullable=False)
