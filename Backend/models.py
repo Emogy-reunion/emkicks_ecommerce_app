@@ -204,7 +204,7 @@ class Cart(db.Model):
         '''
         self.user_id = user_id
 
-class CartItems(db.model):
+class CartItems(db.Model):
     '''
     stores the cart items
     '''
