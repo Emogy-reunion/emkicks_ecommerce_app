@@ -208,5 +208,5 @@ class CartItems(db.Model):
     '''
     stores the cart items
     '''
-    id = db.Column(db.Integer, primary_key=True, nullable=false)
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
     cart_id = db.Column(db.Integer,db.ForeignKey('cart.id'), nullable=False)
