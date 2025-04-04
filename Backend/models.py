@@ -196,7 +196,7 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user = db.relationship('Users', back_populates='cart')
-    cart_items = db.relationship('CartItems', back_ref='cart', lazy='select', cascade='all, delete-orphan')
+    cart_items = db.relationship('CartItems', backref='cart', lazy='select', cascade='all, delete-orphan')
 
     def __init__(self, user_id):
         '''
