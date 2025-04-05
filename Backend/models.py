@@ -210,3 +210,22 @@ class CartItems(db.Model):
     '''
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     cart_id = db.Column(db.Integer,db.ForeignKey('cart.id'), nullable=False)
+    product_type = db.Column(db.String(50), nullable=False)
+    product_id = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    size = db.Column(db.String(50), nullable=False)
+    subtotal = db.Column(db.Float, nullable=False)
+    sneakers = db.relationship('Sneakers', backref='sneaker_cart_items')
+    jerseys = db.relationship('Jerseys', backref='jersy_cart_items')
+
+    def __init__(self, cart_id, product_type, product_id, quantity,
+                 size, subtotal):
+        '''
+        initializes the cart items table with data
+        '''
+        self.cart_id = cart_id
+        self.product_type = product_type,
+        self.product_id = product_id,
+        self.quantity = quantity,
+        self.size = size,
+        self.subtotal = subtotal
