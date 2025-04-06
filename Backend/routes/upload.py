@@ -2,7 +2,7 @@
 saves uploads to the database
 '''
 from flask import Blueprint, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from utils.role import role_required
 from utils.discount import calculate_discount
 import os
@@ -26,19 +26,21 @@ def sneaker_upload():
     name = data['name'].lower()
     original_price = float(data['original_price'])
     discount_rate = int(data['discount_rate'])
-    size = int(data['size'])
+    size = data['size']
     description = data['description']
     status = data['status'].lower()
     category = data['category'].lower()
     brand = data['brand'].lower()
     final_price = original_price
 
+    user_id = get_jwt_identity()
+
     if discount_rate > 0:
         final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
     try:
         new_sneaker = Sneakers(name=name, original_price=original_price, size=size, brand=brand,
-                               discount_rate=discount_rate, final_price=final_price,
+                               user_id=user_id, discount_rate=discount_rate, final_price=final_price,
                                description=description, status=status, category=category)
         db.session.add(new_sneaker)
         db.session.commit()
@@ -93,12 +95,14 @@ def jersey_upload():
     description = data['description']
     final_price = original_price
 
+    user_id = get_jwt_identity()
+
     if discount_rate > 0:
         final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
 
     new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
-                         final_price=final_price, status=status, size=size, season=season, description=description)
+                         user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
 
     try:
         db.session.add(new_jersey)
