@@ -8,6 +8,7 @@ from wtf.validators import DataRequired, Email, Length, InputRequired, Regexp, E
 
 class RegistrationForm(FlaskForm):
     '''
+    initializes the registration form
     validates the registration forms input
     '''
     firstname = StringField('First name', validators=[
@@ -37,5 +38,15 @@ class RegistrationForm(FlaskForm):
         Regexp(r'(?=.*\W)', message="Password must contain at least one special character.")
         ])
     confirmpassword = PasswordField('Confirm password', validators=[InputRequired(), EqualTo('password', message='Passwords must match!')])
-    submit = SubmitField('Sign Up')
+
+class LoginForm(FlaskForm):
+    '''
+    initializes the login form fields
+    validates the login form data
+    '''
+    identifier = StringField('Email/Username', validators = [
+        DataRequired()])
+    password = PasswordField('Password', validators = [DataRequired()])
+
+
 

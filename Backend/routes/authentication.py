@@ -2,7 +2,7 @@ from flasik import Blueprint, jsonify, request
 from models import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
-from form import RegistrationForm
+from form import RegistrationForm, LoginForm
 
 
 auth = Blueprint('auth', __name__)
@@ -57,48 +57,51 @@ def login():
     authenticate the user
     logs them in to the session
     '''
-    data = request.json
+    form = LoginForm(request.get_json)
 
-    identifier = data['identifier'].lower()
-    password = data['password']
+    if form.validate():
+        identifier = form.identifier.data.lower()
+        password = form.password.data
 
-    user = None
+        user = None
 
-    if '@' in identifier:
-        try:
-            user = Users.query.filter_by(email=identifier).first()
-        except Exception as e:
-             return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+        if '@' in identifier:
+            try:
+                user = Users.query.filter_by(email=identifier).first()
+            except Exception as e:
+                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-        if not user:
-            return jsonify({'error': 'The email you entered does not match any account!'}), 404
-    else:
-        try:
-            user = Users.query.filter_by(username=identifier).first()
-        except Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+            if not user:
+                return jsonify({'error': 'The email you entered does not match any account!'}), 404
+        else:
+            try:
+                user = Users.query.filter_by(username=identifier).first()
+            except Exception as e:
+                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-        if not user:
-            return jsonify({'error': 'The username you entered does not match any account!'}), 404
+            if not user:
+                return jsonify({'error': 'The username you entered does not match any account!'}), 404
 
-    if user.check_passwordhash(password):
-        '''
-        verifies the user password
-        if correct it creates and returns access token
-        if incorrect it returns an error message
-        '''
-        try:
-            access_token = create_access_token(identity=user.id)
-            refresh_token = create_refresh_token(identity=user.id)
+        if user.check_passwordhash(password):
+            '''
+            verifies the user password
+            if correct it creates and returns access token
+            if incorrect it returns an error message
+            '''
+            try:
+                access_token = create_access_token(identity=user.id)
+                refresh_token = create_refresh_token(identity=user.id)
 
-            response = jsonify({'success': ' Successfully logged in!'}), 200
-            set_access_cookies(response, access_token)
-            set_refresh_cookies(response, refresh_token)
-            return response
-        except Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-    else:
-        return jsonify({'error': 'Incorrect password. Please try again!'}), 401
+                response = jsonify({'success': ' Successfully logged in!'}), 200
+                set_access_cookies(response, access_token)
+                set_refresh_cookies(response, refresh_token)
+                return response
+            except Exception as e:
+                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+        else:
+            return jsonify({'error': 'Incorrect password. Please try again!'}), 401
+    except Exception as e:
+        return jsonify({'errors': form.errors})
 
 @auth.route('/logout', methods=['POST'])
 def logout():
