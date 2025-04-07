@@ -16,6 +16,7 @@ from routes.user_search import user_search_bp
 from routes.member_search import member_search_bp
 from routes.user_collections import user_posts_bp
 from routes.member_collections import member_posts_bp
+from routes.cart import cart
 
 
 
@@ -30,6 +31,7 @@ app.register_blueprint(user_posts_bp)
 app.register_blueprint(member_posts_bp)
 app.register_blueprint(user_search_bp)
 app.register_blueprint(member_search_bp)
+app.register_blueprint(cart)
 
 create_upload_folder()
 
