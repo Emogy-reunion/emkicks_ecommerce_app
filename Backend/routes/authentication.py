@@ -2,7 +2,6 @@ from flasik import Blueprint, jsonify, request
 from models import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
-from utils.validation import validate_firstname, validate_lastname, check_email
 
 
 auth = Blueprint('auth', __name__)
@@ -12,31 +11,6 @@ def register():
     '''
     allows user to create accounts
     '''
-    data = request.json
-
-    firstname = data['firstname'].lower()
-    lastname = data['lastname'].lower()
-    email = data['email'].lower()
-    username = data['username'].lower()
-    phone = data['phone']
-    password = data['password']
-
-    errors = {}
-    firstname_errors = validate_firstname(firstname)
-    lastname_errors = validate_lastname(lastname)
-    email_errors = check_email(email)
-
-    if firstname_errors:
-        errors['firstname'] = firstname_errors
-
-    if lastname_errors:
-        errors['lastname'] = lastname_errors
-
-    if email_errors:
-        errors['email'] = email_errors
-
-    if errors:
-        return jsonify({'errors': errors}), 400
 
     user = None
     member = None
