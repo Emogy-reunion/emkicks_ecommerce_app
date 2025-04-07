@@ -2,8 +2,8 @@
 an initialization of all the application's forms
 '''
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtf.validators import DataRequired, Email, Length, InputRequired, Regexp, EqualTo
+from wtforms import StringField, PasswordField, IntegerField, FloatField, MultipleFileField
+from wtf.validators import DataRequired, Email, Length, InputRequired, Regexp, EqualTo, NumberRange
 
 
 class RegistrationForm(FlaskForm):
@@ -66,4 +66,5 @@ class SneakerUploadForm(FlaskForm):
     status = StringField('Status', validators=[DataRequired()])
     size = StringField('Size', validators=[DataRequired()])
     category = StringField('Category', validators=[DataRequired()])
-    brand = StirngField('Brand', validators=[DataRequired()])
+    brand = StringField('Brand', validators=[DataRequired()])
+    files = MultipleFileField('Files', validators=[DataRequired()])
