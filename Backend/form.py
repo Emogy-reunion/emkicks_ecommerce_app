@@ -2,8 +2,8 @@
 an initialization of all the application's forms
 '''
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
-from wtf.validators import DataRequired, Email, Length, InputRequired, Regexp, EqualTo
+from wtforms import StringField, PasswordField, IntegerField, FloatField, MultipleFileField
+from wtf.validators import DataRequired, Email, Length, InputRequired, Regexp, EqualTo, NumberRange
 
 
 class RegistrationForm(FlaskForm):
@@ -49,4 +49,42 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired()])
 
 
+class SneakerUploadForm(FlaskForm):
+    '''
+    validates the upload form fields
+    '''
+    name = StringField('Sneaker name', validators=[
+        DataRequired(),
+        Length(min=4, max=45, message='Sneaker name must be betwwen 4 and 45 characters!')])
+    original_price = FloatField('Original price', validators=[
+        DataRequired(),
+        NumberRange(min=0)])
+    discount_rate = IntegerField('Discount rate', validators=[
+        DataRequired(),
+        NumberRange(min=0, max=99)])
+    description = TextField('Description', validators=[DataRequired()])
+    status = StringField('Status', validators=[DataRequired()])
+    size = StringField('Size', validators=[DataRequired()])
+    category = StringField('Category', validators=[DataRequired()])
+    brand = StringField('Brand', validators=[DataRequired()])
+    files = MultipleFileField('Images', validators=[DataRequired()])
 
+class JerseyUploadForm(FlaskForm):
+    '''
+    validates the sneaker upload form fields
+    '''
+    name = StringField('Jersey team name', validators=[
+        DataRequired(),
+        Length(min=4, max=45, message='Sneaker name must be betwwen 4 and 45 characters!')])
+     original_price = FloatField('Original price', validators=[
+         DataRequired(),
+         NumberRange(min=0)])
+     discount_rate = IntegerField('Discount rate', validators=[
+         DataRequired(),
+         NumberRange(min=0, max=99)])
+     description = TextField('Description', validators=[DataRequired()])
+     status = StringField('Status', validators=[DataRequired()])
+     size = StringField('Size', validators=[DataRequired()])
+     season = StringField('Season', validators=[DataRequired()])
+     jersey_type = StringField('Jersey type', validators=[DataRequired()])
+     files = MultipleFileField('Images', validators=[DataRequired()])
