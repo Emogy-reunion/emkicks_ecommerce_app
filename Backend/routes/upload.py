@@ -53,24 +53,24 @@ def sneaker_upload():
 
         uploads = []
 
-        for file in request.files:
-            '''
-            iterate through the files object
-            save the image filenames in the images table
-            '''
-            if file and allowed_extension(file.filename):
-                try:
+        try:
+            for file in request.files:
+                '''
+                iterate through the files object
+                save the image filenames in the images table
+                '''
+                if file and allowed_extension(file.filename):
                     filename = secure_filename(file.filename)
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                     sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
                     uploads.append(filename)
                     db.session.add(sneaker_image)
-                    db.session.commit()
-                except Exception as e:
-                    db.session.rollback()
-                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-            else:
-                return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
+                else:
+                    return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
         if uploads:
             return jsonify({'success': 'Post submitted successfully!'}), 201
