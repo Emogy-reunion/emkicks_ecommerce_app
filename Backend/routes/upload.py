@@ -36,6 +36,7 @@ def sneaker_upload():
         season = form.season.data
 
         final_price = original_price
+        upload = []
 
         if discount_rate > 0:
             final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
@@ -46,14 +47,8 @@ def sneaker_upload():
                                    user_id=user_id, discount_rate=discount_rate, final_price=final_price,
                                    description=description, status=status, category=category)
             db.session.add(new_sneaker)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+            db.session.flush()
 
-        uploads = []
-
-        try:
             for file in request.files:
                 '''
                 iterate through the files object
@@ -102,6 +97,7 @@ def jersey_upload():
         description = form.description.data
 
         final_price = original_price
+        uploads = []
 
         try:
             user_id = get_jwt_identity()
@@ -112,14 +108,8 @@ def jersey_upload():
             new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
                                  user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
             db.session.add(new_jersey)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+            db.session.flush()
 
-        uploads = []
-
-        try:
             for file in request.files:
             '''
             iterates through the file obeject
@@ -139,6 +129,7 @@ def jersey_upload():
                 upload.append(new_file)
             else:
                 return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
+           db.session.commit()
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
