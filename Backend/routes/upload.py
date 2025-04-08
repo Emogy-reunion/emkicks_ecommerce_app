@@ -33,13 +33,9 @@ def sneaker_upload():
         status = form.status.data
         category = form.category.data
         brand = form.brand.data
-        jersey_type = form.jersey_type.lower()
         season = form.season.data
 
         final_price = final_price
-
-
-        user_id = None
 
         if discount_rate > 0:
             final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
