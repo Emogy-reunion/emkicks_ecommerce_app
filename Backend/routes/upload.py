@@ -119,30 +119,29 @@ def jersey_upload():
 
         uploads = []
 
-        for file in request.files:
-        '''
-        iterates through the file obeject
-        '''
-            if file and allowed_extension(file.filename):
+        try:
+            for file in request.files:
             '''
-            checks if the file exists and has a valid filename
-            if the checks pass, 
-                it secures the filename
-                saves the image in the upload folder
-                saves the filename in the database
+            iterates through the file obeject
             '''
-                try:
-                    filename = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    new_file = JerseyImages(jersey_id=new_jersey.id, filename=filename)
-                    db.session.add(new_file)
-                    upload.append(new_file)
-                    db.session.commit()
-                except Exception as e:
-                    db.session.rollback()
-                    return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+                if file and allowed_extension(file.filename):
+                '''
+                checks if the file exists and has a valid filename
+                if the checks pass, 
+                    it secures the filename
+                    saves the image in the upload folder
+                    saves the filename in the database
+                '''
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                new_file = JerseyImages(jersey_id=new_jersey.id, filename=filename)
+                db.session.add(new_file)
+                upload.append(new_file)
             else:
                 return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
     
         if uploads:
             return jsonify({'success': 'Post submitted successfully!'}), 201
