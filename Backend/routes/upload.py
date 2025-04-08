@@ -9,7 +9,7 @@ import os
 from models import Users, Sneakers, Images, db, Jerseys, JerseyImages
 from utils.check_file_extension import allowed_extension
 from werkzeug.utils import secure_filename
-from forms import SneakerUploadForm, JerseyUpload
+from forms import SneakerUploadForm, JerseyUploadForm
 
 post = Blueprint('post', __name__)
 
@@ -89,25 +89,28 @@ def jersey_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    data = request.form
-    name = data['name'].lower()
-    jersey_type = data['jersey_type'].lower()
-    original_price = float(data['original_price'])
-    discount_rate = int(data['discount_rate'])
-    status = data['status'].lower()
-    size = data['size'].lower()
-    season = data['season']
-    description = data['description']
-    final_price = original_price
+    form = JerseyUploadForm(request.get_json)
 
-    user_id = get_jwt_identity()
+    if form.validate():
+        name = form.name.data
+        jersey_type = form.jersey_type.data
+        original_price = form.original_price.data
+        discount_rate = form.discount_rate.data
+        status = form.status.data
+        size = form.size.data
+        season = form.season.data
+        description = form.description.data
 
-    if discount_rate > 0:
-        final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
+        final_price = original_price
+
+        user_id = get_jwt_identity()
+
+        if discount_rate > 0:
+            final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
 
-    new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
-                         user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
+        new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
+                             user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
 
     try:
         db.session.add(new_jersey)
