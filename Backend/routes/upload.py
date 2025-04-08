@@ -9,6 +9,7 @@ import os
 from models import Users, Sneakers, Images, db, Jerseys, JerseyImages
 from utils.check_file_extension import allowed_extension
 from werkzeug.utils import secure_filename
+from forms import SneakerUploadForm, JerseyUpload
 
 post = Blueprint('post', __name__)
 
@@ -22,57 +23,65 @@ def sneaker_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    data = request.form
-    name = data['name'].lower()
-    original_price = float(data['original_price'])
-    discount_rate = int(data['discount_rate'])
-    size = data['size']
-    description = data['description']
-    status = data['status'].lower()
-    category = data['category'].lower()
-    brand = data['brand'].lower()
-    final_price = original_price
+    form = SneakerUploadForm(request.get_json)
 
-    user_id = get_jwt_identity()
+    if form.validate():
+        original_price = form.original_price.data
+        discount_rate = form.discount_rate.data
+        size = form.size.data.lower()
+        description = form.description.data
+        status = form.status.data
+        category = form.category.data
+        brand = form.brand.data
+        jersey_type = form.jersey_type.lower()
+        season = form.season.data
 
-    if discount_rate > 0:
-        final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
+        final_price = final_price
 
-    try:
-        new_sneaker = Sneakers(name=name, original_price=original_price, size=size, brand=brand,
-                               user_id=user_id, discount_rate=discount_rate, final_price=final_price,
-                               description=description, status=status, category=category)
-        db.session.add(new_sneaker)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-    uploads = []
+        user_id = None
 
-    for file in request.files:
-        '''
-        iterate through the files object
-        save the image filenames in the images table
-        '''
-        if file and allowed_extension(file.filename):
-            try:
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
-                uploads.append(filename)
-                db.session.add(sneaker_image)
-            except Exception as e:
-                db.session.rollba()
+        if discount_rate > 0:
+            final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
+
+        try:
+            user_id = get_jwt_identity()
+            new_sneaker = Sneakers(name=name, original_price=original_price, size=size, brand=brand,
+                                   user_id=user_id, discount_rate=discount_rate, final_price=final_price,
+                                   description=description, status=status, category=category)
+            db.session.add(new_sneaker)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+        uploads = []
+
+        for file in request.files:
+            '''
+            iterate through the files object
+            save the image filenames in the images table
+            '''
+            if file and allowed_extension(file.filename):
+                try:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    sneaker_image = Images(sneaker_id=new_sneaker.id, filename=filename)
+                    uploads.append(filename)
+                    db.session.add(sneaker_image)
+                    db.session.commit()
+                except Exception as e:
+                    db.session.rollback()
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-        else:
-            return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
-    db.session.commit()
+            else:
+                return jsonify({'error': 'Invalid file format or file missing. Please try again!'}), 400
 
-    if uploads:
-        return jsonify({'success': 'Post submitted successfully!'}), 201
+        if uploads:
+            return jsonify({'success': 'Post submitted successfully!'}), 201
+        else:
+            return jsonify({'error': 'Post submission failed. Please try again!'}), 400
     else:
-        return jsonify({'error': 'Post submission failed. Please try again!'}), 400
+        return jsonify({'error': form.errors}), 400
 
 @jwt_required()
 @role_required('admin')
