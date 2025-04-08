@@ -35,7 +35,7 @@ def sneaker_upload():
         brand = form.brand.data
         season = form.season.data
 
-        final_price = final_price
+        final_price = original_price
 
         if discount_rate > 0:
             final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
@@ -103,29 +103,27 @@ def jersey_upload():
 
         final_price = original_price
 
-        user_id = get_jwt_identity()
+        try:
+            user_id = get_jwt_identity()
 
-        if discount_rate > 0:
-            final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
+            if discount_rate > 0:
+                final_price = calculate_discount(discount_rate=discount_rate, original_price=original_price)
 
+            new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
+                                 user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
+            db.session.add(new_jersey)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-        new_jersey = Jerseys(name=name, jersey_type=jersey_type, original_price=original_price, discount_rate=discount_rate,
-                             user_id=user_id, final_price=final_price, status=status, size=size, season=season, description=description)
+        uploads = []
 
-    try:
-        db.session.add(new_jersey)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-
-    uploads = []
-
-    for file in request.files:
+        for file in request.files:
         '''
         iterates through the file obeject
         '''
-        if file and allowed_extension(file.filename):
+            if file and allowed_extension(file.filename):
             '''
             checks if the file exists and has a valid filename
             if the checks pass, 
@@ -133,20 +131,22 @@ def jersey_upload():
                 saves the image in the upload folder
                 saves the filename in the database
             '''
-            try:
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                new_file = JerseyImages(jersey_id=new_jersey.id, filename=filename)
-                db.session.add(new_file)
-                upload.append(new_file)
-            except Exception as e:
-                db.session.rollback()
-                return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+                try:
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    new_file = JerseyImages(jersey_id=new_jersey.id, filename=filename)
+                    db.session.add(new_file)
+                    upload.append(new_file)
+                    db.session.commit()
+                except Exception as e:
+                    db.session.rollback()
+                    return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+            else:
+                return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
+    
+        if uploads:
+            return jsonify({'success': 'Post submitted successfully!'}), 201
         else:
-            return jsonify({'error': 'Invalid email format or file missing. Please try again!'}), 400
-    db.session.commit()
-
-    if uploads:
-        return jsonify({'success': 'Post submitted successfully!'}), 201
+            return jsonify({'error': 'Post submission failed. Please try again!'}), 400
     else:
-        return jsonify({'error': 'Post submission failed. Please try again!'}), 400
+        return jsonify({'errors': form.errors})
