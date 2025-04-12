@@ -99,7 +99,7 @@ def login():
             except Exception as e:
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
         else:
-            return jsonify({'error': 'Incorrect password. Please try again!'}), 401
+            return jsonify({'error': 'Incorrect password. Please try again!'}), 400
     except Exception as e:
         return jsonify({'errors': form.errors})
 
