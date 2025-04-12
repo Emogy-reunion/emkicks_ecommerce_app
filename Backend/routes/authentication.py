@@ -1,4 +1,4 @@
-from flasik import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request
 from models import Users, db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
 from utils.verification_email import send_verification_email
@@ -57,7 +57,7 @@ def login():
     authenticate the user
     logs them in to the session
     '''
-    form = LoginForm(request.get_json)
+    form = LoginForm(data=request.get_json)
 
     if form.validate():
         identifier = form.identifier.data.lower()
@@ -116,8 +116,7 @@ def logout():
         return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
 
 @jwt_required(refresh=True)
-@auth.route('/refresh_token', methods=['POST'])
-def refresh_token():
+@auth.route('/refresh_token', methods=['POST']) def refresh_token():
     '''
     renews an access token after it expires
     '''
