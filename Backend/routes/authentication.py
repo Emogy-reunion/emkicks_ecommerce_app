@@ -99,18 +99,21 @@ def login():
             except Exception as e:
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
         else:
-            return jsonify({'error': 'Incorrect password. Please try again!'}), 401
+            return jsonify({'error': 'Incorrect password. Please try again!'}), 400
     except Exception as e:
-        return jsonify({'errors': form.errors})
+        return jsonify({'errors': form.errors}), 400
 
 @auth.route('/logout', methods=['POST'])
 def logout():
     '''
     logs out the user by destroying the jwt cookies
     '''
-    response = jsonify({'success': 'Successfully logged out!'}), 200
-    unset_jwt_cookies(response)
-    return response
+    try:
+        response = jsonify({'success': 'Successfully logged out!'}), 200
+        unset_jwt_cookies(response)
+        return response,200
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
 
 @jwt_required(refresh=True)
 @auth.route('/refresh_token', methods=['POST'])
@@ -118,7 +121,10 @@ def refresh_token():
     '''
     renews an access token after it expires
     '''
-    user_id = get_jwt_identity()
-    response = ({'success': 'Access cookies refreshed successfully!'}), 200
-    set_jwt_access_cookies(response)
-    return response
+    try:
+        user_id = get_jwt_identity()
+        response = ({'success': 'Access cookies refreshed successfully!'}), 200
+        set_jwt_access_cookies(response)
+        return response, 200
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
