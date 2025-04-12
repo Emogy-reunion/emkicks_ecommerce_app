@@ -7,7 +7,7 @@
 3. [Installation](#installation)
 4. [Usage](#usage)
 5. [Contributing](#contributing)
-6. [Licence](#licence)
+6. [License](#license)
 7. [Contact](#contact)
 
 ## Introduction
@@ -20,15 +20,15 @@
 
 ### Backend
 * The backend consists of:
-**app.py**: Entry point of the application
-**create_app.py**: Application factory
-**config.py**: Configuration settings
-**form.py**: Form classes and validation
-**models.py**: Database models
-**routes/**: Application routes and views
-**utils/**: Utility functions and helpers
-**migrations/**: stores migrations scripts
-**requirements.txt**: dependencies
+* **app.py**: Entry point of the application
+* **create_app.py**: Application factory
+* **config.py**: Configuration settings
+* **form.py**: Form classes and validation
+* **models.py**: Database models
+* **routes/**: Application routes and views
+* **utils/**: Utility functions and helpers
+* **migrations/**: stores migrations scripts
+* **requirements.txt**: dependencies
 
 ## Installation
 * To get started with this repository, follow these steps
@@ -39,8 +39,10 @@
 
 ## Usage
 1. **Navigate to the project directory**:
+* To run the backend navigate to the directory containing the backend code
     ```sh
         cd emkicks_ecommerce_app
+        cd Backend
     ```
 2. **Create virtual environment**: Ensure you have python and virtualenv installed. Create and then activate a virtual environment
     ```sh
