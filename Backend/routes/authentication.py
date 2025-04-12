@@ -121,7 +121,10 @@ def refresh_token():
     '''
     renews an access token after it expires
     '''
-    user_id = get_jwt_identity()
-    response = ({'success': 'Access cookies refreshed successfully!'}), 200
-    set_jwt_access_cookies(response)
-    return response
+    try:
+        user_id = get_jwt_identity()
+        response = ({'success': 'Access cookies refreshed successfully!'}), 200
+        set_jwt_access_cookies(response)
+        return response, 200
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again'}), 500
