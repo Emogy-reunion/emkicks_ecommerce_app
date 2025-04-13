@@ -74,9 +74,10 @@ def sneaker_upload():
     else:
         return jsonify({'error': form.errors}), 400
 
+
+@post.route('/jersey_upload', methods=['POST'])
 @jwt_required()
 @role_required('admin')
-@post.route('/jersey_upload', methods=['POST'])
 def jersey_upload():
     '''
     allows the admin to upload jerseys and their details
