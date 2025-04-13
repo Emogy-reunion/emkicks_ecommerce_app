@@ -13,9 +13,9 @@ from forms import SneakerUploadForm, JerseyUploadForm
 
 post = Blueprint('post', __name__)
 
+@post.route('/sneaker_upload', methods=['POST'])
 @jwt_required()
 @role_required('admin')
-@post.route('/sneaker_upload', methods=['POST'])
 def sneaker_upload():
     '''
     allows admins to  upload sneaker details and  photos
@@ -23,7 +23,7 @@ def sneaker_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    form = SneakerUploadForm(request.get_json)
+    form = SneakerUploadForm(data=request.form)
 
     if form.validate():
         original_price = form.original_price.data
@@ -74,9 +74,10 @@ def sneaker_upload():
     else:
         return jsonify({'error': form.errors}), 400
 
+
+@post.route('/jersey_upload', methods=['POST'])
 @jwt_required()
 @role_required('admin')
-@post.route('/jersey_upload', methods=['POST'])
 def jersey_upload():
     '''
     allows the admin to upload jerseys and their details
@@ -84,7 +85,7 @@ def jersey_upload():
     if not request.files:
         return jsonify({'error': 'No file uploaded. Please select one or more files and try again!'}), 400
 
-    form = JerseyUploadForm(request.get_json)
+    form = JerseyUploadForm(data=request.form)
 
     if form.validate():
         name = form.name.data
@@ -139,4 +140,4 @@ def jersey_upload():
         else:
             return jsonify({'error': 'Post submission failed. Please try again!'}), 400
     else:
-        return jsonify({'errors': form.errors})
+        return jsonify({'errors': form.errors}), 400
