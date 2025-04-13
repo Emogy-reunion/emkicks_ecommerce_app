@@ -9,8 +9,8 @@ from flask_jwt_extended import jwt_required
 
 member_search_bp = Blueprint('member_search_bp', __name__)
 
-@jwt_required()
 @member_search_bp.route('/member_sneaker_search', methods=['GET'])
+@jwt_required()
 def member_sneaker_search():
     '''
     allows user to filter sneakers
@@ -91,8 +91,8 @@ def member_sneaker_search():
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
-@jwt_required()
 @member_search_bp.route('/member_jersey_search', methods=['GET'])
+@jwt_required()
 def member_jersey_search():
     '''
     allows logged in users to filter jerseys
