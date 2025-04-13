@@ -13,9 +13,9 @@ from forms import SneakerUploadForm, JerseyUploadForm
 
 post = Blueprint('post', __name__)
 
+@post.route('/sneaker_upload', methods=['POST'])
 @jwt_required()
 @role_required('admin')
-@post.route('/sneaker_upload', methods=['POST'])
 def sneaker_upload():
     '''
     allows admins to  upload sneaker details and  photos
