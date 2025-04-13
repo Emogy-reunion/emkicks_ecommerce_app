@@ -10,8 +10,8 @@ from sqlalchemy.orm import selectinload
 member_posts_bp = Blueprint('member_posts_bp', __name__)
 
 
-@jwt_required()
 @member_posts_bp.route('/member_men_sneaker_preview', methods=['GET'])
+@jwt_required()
 def member_men_sneakers_preview():
     '''
     retrieves men sneakers previews for logged in users
@@ -60,8 +60,8 @@ def member_men_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@jwt_required()
 @member_posts_bp.route('/member_women_sneaker_preview', methods=['GET'])
+@jwt_required()
 def member_women_sneakers_preview():
     '''
     retrieves women sneaker previews for logged in users
@@ -108,8 +108,8 @@ def member_women_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@jwt_required()
 @member_posts_bp.route('/member_kids_sneakers_preview', methods=['GET'])
+@jwt_required()
 def member_kids_sneakers_preview():
     '''
     retrieves the kids sneakers preview for logged in users
@@ -157,8 +157,8 @@ def member_kids_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@jwt_required()
 @member_posts_bp.route('/member_jerseys_preview', methods=['GET'])
+@jwt_required()
 def member_jerseys_preview():
     '''
     retrieves the jerseys previews for logged in users
@@ -206,8 +206,8 @@ def member_jerseys_preview():
                 }
         return jsonify(response)
 
-@jwt_required()
 @member_posts_bp.route('/member_sneaker_details/<int:sneaker_id>', methods=['GET'])
+@jwt_required()
 def member_sneaker_details(sneaker_id):
     '''
     retrieves the sneaker details from the database
@@ -237,8 +237,8 @@ def member_sneaker_details(sneaker_id):
                 }
         return jsonify(sneaker_details), 200
 
-@jwt_required()
 @member_posts_bp.route('/member_jersey_details/<int:jersey_id>', methods=['GET'])
+@jwt_required()
 def member_jersey_details(jersey_id):
     '''
     retrieves jersey details for logged in users
