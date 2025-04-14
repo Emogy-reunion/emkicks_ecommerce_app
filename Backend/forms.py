@@ -88,3 +88,12 @@ class JerseyUploadForm(FlaskForm):
      season = StringField('Season', validators=[DataRequired()])
      jersey_type = StringField('Jersey type', validators=[DataRequired()])
      files = MultipleFileField('Images', validators=[DataRequired()])
+
+class SneakerSizeForm(FlaskForm):
+    '''
+    validates the sneaker size
+    '''
+    size = StringField('Size', validators=[DataRequired()])
+    quantity = IntegerField('Quantity', validators=[
+        DataRequired(),
+        NumberRange(min=1, message='43')
