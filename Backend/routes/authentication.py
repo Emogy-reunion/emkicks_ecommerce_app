@@ -70,20 +70,15 @@ def login():
                 user = Users.query.filter_by(email=identifier).first()
             except Exception as e:
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
-
-            if not user:
-                return jsonify({'error': 'The email you entered does not match any account!'}), 404
         else:
             try:
                 user = Users.query.filter_by(username=identifier).first()
             except Exception as e:
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-            if not user:
-                return jsonify({'error': 'The username you entered does not match any account!'}), 404
-
-        if user.check_passwordhash(password):
+        if user and user.check_passwordhash(password):
             '''
+            checks if the user is available
             verifies the user password
             if correct it creates and returns access token
             if incorrect it returns an error message
@@ -99,7 +94,7 @@ def login():
             except Exception as e:
                 return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
         else:
-            return jsonify({'error': 'Incorrect password. Please try again!'}), 400
+            return jsonify({'error': 'Invalid credentials. Please try again!'}), 400
     except Exception as e:
         return jsonify({'errors': form.errors}), 400
 
