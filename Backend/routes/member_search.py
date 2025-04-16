@@ -20,6 +20,7 @@ def member_sneaker_search():
 
     if not form.validate():
         return jsonify({'error': form.errors}), 400
+    
     name = form.name.data.lower()
     minimum_price = form.minimum_price.data
     maximum_price = form.maximum_price.data
@@ -102,12 +103,18 @@ def member_jersey_search():
     '''
     allows logged in users to filter jerseys
     '''
-    name = request.args.get('name').lower()
-    maximum_price = float(request.args.get('maximum_price'))
-    minimum_price = float(request.args.get('minimum_price'))
-    size = request.args.get('size').lower()
-    season = request.args.get('season').lower()
-    jersey_type = request.args.get('jersey_type').lower()
+
+    form = JerseySearchForm(data=request.get_json())
+
+    if not form.validate():
+        return jsonify({"error": form.errors}), 400
+
+    name = form.name.data.lower()
+    minimum_price = form.minimum_price.data
+    maximum_price = form.maximum_price.data
+    size = form.size.data.lower()
+    season = form.season.lower()
+    jersey_type = form.jersey_type.lower()
 
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
