@@ -4,6 +4,7 @@ contains routes that allow the users to filter products
 from flask import Blueprint, jsonify, request
 from models import Sneakers, Images
 from sqlalchemy.orm import selectinload
+from forms import SneakerSearchForm, JerseySearchForm
 
 user_search_bp = Blueprint('user_search_bp', __name__)
 
@@ -12,12 +13,18 @@ def user_sneakers_search():
     '''
     allows user to filter sneakers
     '''
-    name = request.args.get('name').lower()
-    minimum_price = request.args.get('minimum_price', type=float)
-    maximum_price = request.args.get('maximum_price', type=float)
-    category = request.args.get('category').lower()
-    size = request.args.get('size')
-    brand = request.args.get('brand').lower()
+    form = SneakerSearchForm(data=request.get_json())
+
+    if not form.validate():
+        return jsonify({'error': form.errors}), 400
+
+    name = form.name.data.lower()
+    minimum_price = form.minimum_price.data
+    maximum_price = form.maximum_price.data
+    category = form.category.data.lower()
+    size = form.size.data
+    brand = form.brand.data.lower()
+
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
 
