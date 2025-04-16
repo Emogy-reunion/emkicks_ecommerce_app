@@ -97,12 +97,18 @@ def user_jerseys_search():
     '''
     allows users to filter jerseys according to certain criteria
     '''
-    name = request.args.get('name').lower()
-    minimum_price = request.args.get('minimum_price', type=float)
-    maximum_price = request.args.get('maximum_price', type=float)
-    size = request.args.get('size').lower()
-    season = request.args.get('season').lower()
-    jersey_type = request.args.get('jersey_type').lower()
+
+    form = JerseySearchForm(data=request.get_json())
+
+    if not form.validate():
+        return jsonify({'error': form.errors})
+    
+    name = form.name.data.lower()
+    minimum_price = form.minimum_price.data
+    maximum_price = form.maximum_price.data
+    size = form.size.data.lower()
+    season = form.season.lower()
+    jersey_type = form.jersey_type.lower()
 
     page = request.args.get('page', 1, type=int)
     per_page = reqeust.args.get('per_page', 15, type=int)
