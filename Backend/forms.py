@@ -107,3 +107,54 @@ class JerseySizeQuantityForm(FlaskForm):
         DataRequired(),
         NumberRange(min=1, message='43')])
 
+class SneakerSearchForm(FlaskForm):
+    '''
+    validates  sneakers search form
+    '''
+    name = StringField('Name', validators=[
+        Optional(),
+        Length(max=50, message='Maximum length must not exceed 50 characters!'}
+        ])
+    minimum_price = FloatField('Minimum price', validators=[
+        Optional(),
+        NumberRange(min=0, message='Minimum price must not be below 0!')
+        ])
+    maximum_price = FloatField('Maximum price', validators=[
+        Optional(),
+        NumberRange(min=0, message='Maximum price must not be below 0!')
+        ])
+    category = StringField('Category', validators=[
+        Optional(),
+        Length(Max=10, message='Category length must not exceed 10 characters!')
+        ])
+    size = StringField('Size', validators=[
+        Optional(),
+        NumberRange(min=34, message='Sneaker size cannot be below 34!')])
+    brand = StringField('Brand', validators=[
+        Optional(),
+        Length(max=50, message='Maximum length must not exceed 25 characters!'})
+        ])
+
+class JerseySearchForm(FlaskForm):
+     name = StringField('Name', validators=[
+         Optional(),
+         Length(max=50, message='Maximum length must not exceed 50 characters!'}
+           ])
+     minimum_price = FloatField('Minimum price', validators=[
+         Optional(),
+         NumberRange(min=0, message='Minimum price must not be below 0!')
+         ])
+     maximum_price = FloatField('Maximum price', validators=[
+         Optional(),
+         NumberRange(min=0, message='Maximum price must not be below 0!')
+         ])
+     season = StringField('Season', validators=[
+         Optional()
+         ])
+     jersey_type = StringField('Jersey Type', valiators=[
+         Optional()
+         ])
+     size = StringField('Size', validators=[
+         Optional(),
+         NumberRange(min=10, message='Sneaker size cannot be below 10!')])
+
