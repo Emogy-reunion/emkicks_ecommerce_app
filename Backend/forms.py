@@ -109,7 +109,7 @@ class JerseySizeQuantityForm(FlaskForm):
 
 class SneakerSearchForm(FlaskForm):
     '''
-    validates the logged out users sneakers search form
+    validates  sneakers search form
     '''
     name = StringField('Name', validators=[
         Optional(),
@@ -134,3 +134,27 @@ class SneakerSearchForm(FlaskForm):
         Optional(),
         Length(max=50, message='Maximum length must not exceed 25 characters!'})
         ])
+
+class JerseySearchForm(FlaskForm):
+     name = StringField('Name', validators=[
+         Optional(),
+         Length(max=50, message='Maximum length must not exceed 50 characters!'}
+           ])
+     minimum_price = FloatField('Minimum price', validators=[
+         Optional(),
+         NumberRange(min=0, message='Minimum price must not be below 0!')
+         ])
+     maximum_price = FloatField('Maximum price', validators=[
+         Optional(),
+         NumberRange(min=0, message='Maximum price must not be below 0!')
+         ])
+     season = StringField('Season', validators=[
+         Optional()
+         ])
+     jersey_type = StringField('Jersey Type', valiators=[
+         Optional()
+         ])
+     size = StringField('Size', validators=[
+         Optional(),
+         NumberRange(min=10, message='Sneaker size cannot be below 10!')])
+
