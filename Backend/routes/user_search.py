@@ -101,7 +101,7 @@ def user_jerseys_search():
     form = JerseySearchForm(data=request.get_json())
 
     if not form.validate():
-        return jsonify({'error': form.errors})
+        return jsonify({'error': form.errors}), 400
     
     name = form.name.data.lower()
     minimum_price = form.minimum_price.data
