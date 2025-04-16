@@ -3,16 +3,17 @@ contains routes that perform CRUD operations for the cart
 '''
 from flask import Blueprint, jsonify, request
 from forms import SizeQuantityForm
+from models import Sneakers, Jerseys, Images, Cart, CartItems, db
 
 
 cart = Blueprint('cart', __name__)
 
 @cart.route('/add_to_cart', methods=['POST'])
-def add_to_cart(product_id):
+def add_to_cart():
     '''
     adds items to the cart
     '''
-    form = SizeQuantityForm(request.get_json)
+    form = SizeQuantityForm(data=request.get_json())
 
     if not form.validate():
         return jsonify({'error': form.errors}), 400
@@ -28,10 +29,18 @@ def add_to_cart(product_id):
         user_id = get_jwt_identity()
         if product_type == 'sneaker':
             sneaker = Sneakers.query.filter_by(id=product_id).first()
-            price = sneaker.final_price
+            
+            if sneaker:
+                price = sneaker.final_price
+            else:
+                return jsonify({"error": 'Item not found!'}), 404
         elif product_type == 'jersey':
-            jersey = Jerseys.query.filter-by(id=product_id).first()
-            price = jersey.final_price
+            jersey = Jerseys.query.filter_by(id=product_id).first()
+
+            if jersey:
+                price = jersey.final_price
+            else:
+                return jsonify({"error": 'Item not found!'}), 404
         else:
             return jsonify('error': 'Invalid product type!'}), 400
 
@@ -43,7 +52,7 @@ def add_to_cart(product_id):
             '''
             if the cart doesn't exist create it
             '''
-            cart = Cart(user_id=user)
+            cart = Cart(user_id=user_id)
             db.session.add(cart)
             db.session.commit()
 
@@ -53,7 +62,18 @@ def add_to_cart(product_id):
                     item.quantity += 1
                     item.subtotal = item.price * item.quantity
                     db.session.commit()
-                    return jsonify({'Success': 'Item added successfully'}), 201
+                    found = True
+                    return jsonify({'success': 'Item added to cart!'}), 201
+        
+        subtotal = quantity * price
+        item = CartItem(cart_id=cart.id, product_id=product_id, price=price,
+                        product_type=product_type, quantity=quantity,
+                        size=size, subtotal=subtotal)
+        db.session.add(item)
+        db.session.commit()
+        return jsonify({'success': 'Item added to cart!'}), 201
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
         
