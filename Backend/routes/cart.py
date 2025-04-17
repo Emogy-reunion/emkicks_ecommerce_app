@@ -4,11 +4,13 @@ contains routes that perform CRUD operations for the cart
 from flask import Blueprint, jsonify, request
 from forms import SizeQuantityForm
 from models import Sneakers, Jerseys, Images, Cart, CartItems, db
+from flask_jwt_extended import jwt_required
 
 
 cart = Blueprint('cart', __name__)
 
 @cart.route('/add_to_cart', methods=['POST'])
+@jwt_required()
 def add_to_cart():
     '''
     adds items to the cart
