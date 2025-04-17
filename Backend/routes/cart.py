@@ -78,4 +78,23 @@ def add_to_cart():
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
-        
+@cart.route('/clear_cart', methods=['DELETE'])
+@jwt_required()
+def clear_cart():
+    '''
+    clears all items from the cart
+    '''
+    try:
+        user_id = get_jwt_identity()
+
+        cart = Cart.query.filter_by(user_id=user_id).first()
+
+        if not cart:
+            return jsonify({'error': 'Cart not found!'}), 404
+
+        CartItems.query.filter_by(cart_id=cart.id).delete()
+        db.session.commit()
+        return jsonify({'success': 'Cart cleared successfully!'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
