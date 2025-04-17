@@ -75,6 +75,7 @@ def add_to_cart():
         db.session.commit()
         return jsonify({'success': 'Item added to cart!'}), 201
     except Exception as e:
+        db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
