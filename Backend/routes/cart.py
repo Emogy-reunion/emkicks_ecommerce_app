@@ -90,12 +90,12 @@ def clear_cart():
 
         cart = Cart.query.filter_by(user_id=user_id).first()
 
-        if not cart:
-            return jsonify({'error': 'Cart not found!'}), 404
+        if not cart or not cart.items:
+            return jsonify({'error': 'Your cart is already empty or unavailable!'}), 404
 
         CartItems.query.filter_by(cart_id=cart.id).delete()
         db.session.commit()
-        return jsonify({'success': 'Cart cleared successfully!'}), 200
+        return jsonify({'success': 'Your cart has been cleared successfully!'}), 200
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}),500
