@@ -136,9 +136,15 @@ def update_cart_item():
     '''
     updates an item in the cart
     '''
+
+    form = SizeQuantityForm(data=request.get_json)
     product_id = request.json.get('product_id')
-    size = request.json.get('size')
-    quantity = request.json.get('quantity')
+
+    if not form.validate():
+        return jsonify({"error": form.errors}), 400
+
+    size = form.size.data
+    quantity = form.quantity.data
 
     try:
         user_id = get_jwt_identity()
