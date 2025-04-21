@@ -129,3 +129,37 @@ def remove_from_cart():
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
+
+@cart_route('/update_cart_item', methods=['PATCH'])
+@jwt_required()
+def update_cart_item():
+    '''
+    updates an item in the cart
+    '''
+    product_id = request.json.get('product_id')
+    size = request.json.get('size')
+    quantity = request.json.get('quantity')
+
+    try:
+        user_id = get_jwt_identity()
+        cart = Cart.query.filter_by(user_id=user_id).first()
+
+        if not cart or not cart.items:
+            return jsonify({'error': 'Your cart is already empty or unavailable!'}), 404
+        item = CartItems.query.filter_by(product_id=product_id).options(cart_id=cart_id, product_id=product_id).first()
+         
+        if not item:
+            return jsonify({'error': 'Item not found!'}), 404
+
+        if size:
+            item.size = size
+
+        if quantity:
+            item.quantity = quantity
+
+        db.session.add(item)
+        db.session.commit()
+        return jsonify({'message': 'Cart item updated successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
