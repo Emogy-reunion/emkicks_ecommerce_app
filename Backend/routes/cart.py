@@ -164,7 +164,6 @@ def update_cart_item():
             item.quantity = quantity
             item.subtotal = item.quantity * item.price
 
-        db.session.add(item)
         db.session.commit()
         return jsonify({'message': 'Cart item updated successfully'}), 200
     except Exception as e:
