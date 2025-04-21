@@ -61,10 +61,9 @@ def add_to_cart():
         if cart.items:
             for item in cart.items:
                 if item.product_id == product_id and item.size == size:
-                    item.quantity += 1
+                    item.quantity += quantity
                     item.subtotal = item.price * item.quantity
                     db.session.commit()
-                    found = True
                     return jsonify({'success': 'Item added to cart!'}), 201
         
         subtotal = quantity * price
@@ -130,3 +129,9 @@ def remove_from_cart():
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
+@cart.route("/update_cart_item", methods=['POST'])
+@jwt_required()
+def update_cart_item():
+    '''
+    updates the size and quantity of a cart item
+    '''
