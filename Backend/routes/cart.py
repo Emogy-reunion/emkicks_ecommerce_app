@@ -152,7 +152,7 @@ def update_cart_item():
 
         if not cart or not cart.items:
             return jsonify({'error': 'Your cart is already empty or unavailable!'}), 404
-        item = CartItems.query.filter_by(cart_id=cart.id, cart_item_id=cart_item_id).first()
+        item = CartItems.query.filter_by(id=cart_item_id, cart_id=cart.id).first()
          
         if not item:
             return jsonify({'error': 'Item not found!'}), 404
