@@ -156,6 +156,7 @@ def update_cart_item():
 
         if quantity:
             item.quantity = quantity
+            item.subtotal = item.quantity * item.price
 
         db.session.add(item)
         db.session.commit()
