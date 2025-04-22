@@ -17,6 +17,16 @@ def member_profile():
         user = db.session.get(Users, user_id)
 
         if not user:
-            return jsonify({'error': 'User not found!'})
+            return jsonify({'error': 'User not found!'}), 404
+
+        profile = {
+                'firstname': user.firstname,
+                'lastname': user.lastname,
+                'email': user.email,
+                'phone': user.phone,
+                'username': user.username,
+                'joined': user.created_at.strftime('%d %B %Y')
+                }
+        return jsonify(profile), 200
 
 
