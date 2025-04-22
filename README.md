@@ -85,10 +85,10 @@
 * Please make sure to follow the project's code style and write clear, concise commit messages.
 
 ## License
-* This project is licence under the MIT License
+* This project is licensed under the MIT License
 
 ## Contact
 * If you have any questions, feel free to reach out
 
-   -**Mark Victor Mugendi**
-   -**Email:** mv7786986@gmail.com
+### **Mark Victor Mugendi**
+### **Email:** markvictormugendi@gmail.com
