@@ -151,10 +151,11 @@ def update_cart_item():
 
         if not cart or not cart.items:
             return jsonify({'error': 'Your cart is already empty or unavailable!'}), 404
+
         item = CartItems.query.filter_by(id=cart_item_id, cart_id=cart.id).first()
          
         if not item:
-            return jsonify({'error': 'Item not found!'}), 404
+            return jsonify({'error': 'Item not found in your cart!'}), 404
 
         if size:
             item.size = size
@@ -164,7 +165,7 @@ def update_cart_item():
             item.subtotal = item.quantity * item.price
 
         db.session.commit()
-        return jsonify({'message': 'Cart item updated successfully'}), 200
+        return jsonify({'message': 'Cart item updated successfully!'}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
