@@ -38,4 +38,7 @@ app.register_blueprint(member_profile_bp)
 create_upload_folder()
 
 if __name__ == '__main__':
-        app.run(debug=True)
+    '''
+    runs the application
+    '''
+    app.run(debug=True)
