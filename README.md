@@ -1,4 +1,4 @@
-# EMKicks E-Commerce App
+# EMKicks KE E-Commerce App
 
 ## Table of Contents
 
