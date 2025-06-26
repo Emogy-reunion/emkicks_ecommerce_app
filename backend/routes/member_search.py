@@ -1,24 +1,32 @@
 '''
 contains products filtering routes for logged in users
 '''
-from routes.user_search import find
 from models import Sneakers, Images, Jerseys, JerseyImages
-from flask import request, jsonify
+from flask import request, jsonify, Blueprint
 from sqlalchemy.orm import selectinload
 from flask_jwt_extended import jwt_required
+from forms import SneakerSearchForm, JerseySearchForm
 
+
+member_search_bp = Blueprint('member_search_bp', __name__)
+
+@member_search_bp.route('/member_sneaker_search', methods=['GET'])
 @jwt_required()
-@find.route('/member_sneaker_search', methods=['GET']\)
 def member_sneaker_search():
     '''
     allows user to filter sneakers
     '''
-    name = request.args.get('name').lower()
-    maximum_price = float(request.args.get('maximum_price'))
-    minimum_price = float(request.args.get('mimimum_price'))
-    size = int(request.args.get('size'))
-    brand = request.args.get('brand').lower()
-    category = request.args.get('category').lower()
+    form = SneakerSearchForm(data=request.get_json())
+
+    if not form.validate():
+        return jsonify({'error': form.errors}), 400
+    
+    name = form.name.data.lower()
+    minimum_price = form.minimum_price.data
+    maximum_price = form.maximum_price.data
+    category = form.category.data.lower()
+    size = form.size.data
+    brand = form.brand.data.lower()
 
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 15, type=int)
@@ -84,39 +92,46 @@ def member_sneaker_search():
                         }
                     }
             return jsonify(response), 200
-        except Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
 
+@member_search_bp.route('/member_jersey_search', methods=['GET'])
 @jwt_required()
-@find.route('/member_jersey_search', methods['GET'])
 def member_jersey_search():
     '''
-   allows logged in users to filter jerseys
-   '''
-   name = request.args.get('name').lower()
-   maximum_price = float(request.args.get('maximum_price'))
-   minimum_price = float(request.args.get('minimum_price'))
-   size = request.args.get('size').lower()
-   season = request.args.get('season').lower()
-   jersey_type = request.args.get('jersey_type').lower()
+    allows logged in users to filter jerseys
+    '''
 
-   page = request.args.get('page', 1, type=int)
-   per_page  = request.args.get('per_page', 15, type=int)
+    form = JerseySearchForm(data=request.get_json())
 
-   try:
-       jerseys = Jerseys.query.options(selectinload(Jerseys.images))
+    if not form.validate():
+        return jsonify({"error": form.errors}), 400
 
-       if not jerseys:
-           return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+    name = form.name.data.lower()
+    minimum_price = form.minimum_price.data
+    maximum_price = form.maximum_price.data
+    size = form.size.data.lower()
+    season = form.season.lower()
+    jersey_type = form.jersey_type.lower()
 
-       if name:
-           jerseys = jerseys.filter(Jerseys.name.ilike(f'%{name}%'))
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 15, type=int)
+
+    try:
+        jerseys = Jerseys.query.options(selectinload(Jerseys.images))
+
+        if not jerseys:
+            return jsonify({'error': 'No jerseys available at the moment. Stay tuned for new arrivals!'}), 404
+
+        if name:
+            jerseys = jerseys.filter(Jerseys.name.ilike(f'%{name}%'))
 
         if maximum_price is not None:
             if maximum_price <= 0:
                 return jsonify({"error": 'Maximum price cannot be less than or equal to zero!'}), 400
-            jerseys = jersers.filter(Jerseys.final_price <= maximum_price)
+            jerseys = jerseys.filter(Jerseys.final_price <= maximum_price)
 
         if minimum_price is not None:
             if minimum_price < 0:
@@ -148,7 +163,8 @@ def member_jersey_search():
                         'image': jersey.images[0].filename if jersey.images else None
                         }
                     for jersey in paginated_results.items
-                    }
+                    ]
+
             response = {
                     'jerseys': jerseys,
                     'pagination': {
@@ -161,5 +177,5 @@ def member_jersey_search():
                         }
                     }
             return jsonify(response), 200
-        except  Exception as e:
-            return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
+    except Exception as e:
+        return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500

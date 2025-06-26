@@ -1,15 +1,17 @@
 '''
 retrieve sneakers and jerseys for logged in users
 '''
-from flask import request, jsonify
-from routes.user_collections import posts
+from flask import request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required
 from utils.role import role_required
 from models import Sneakers, Images, db, Jerseys, JerseyImages
 from sqlalchemy.orm import selectinload
 
+member_posts_bp = Blueprint('member_posts_bp', __name__)
+
+
+@member_posts_bp.route('/member_men_sneaker_preview', methods=['GET'])
 @jwt_required()
-@posts.route('/member_men_sneaker_preview', methods=['GET'])
 def member_men_sneakers_preview():
     '''
     retrieves men sneakers previews for logged in users
@@ -37,7 +39,7 @@ def member_men_sneakers_preview():
                     'name': sneaker.name,
                     'sneaker_id': sneaker.id,
                     'price': sneaker.final_price,
-                    'discount': sneaker.discount_rate.
+                    'discount': sneaker.discount_rate,
                     'original_price': sneaker.original_price,
                     'status': sneaker.status,
                     'image': sneaker.images[0].filename if sneaker.images else None
@@ -58,8 +60,8 @@ def member_men_sneakers_preview():
                 }
         return jsonify(response), 200
 
+@member_posts_bp.route('/member_women_sneaker_preview', methods=['GET'])
 @jwt_required()
-@post.route('/member_women_sneaker_preview', method=['GET'])
 def member_women_sneakers_preview():
     '''
     retrieves women sneaker previews for logged in users
@@ -106,8 +108,8 @@ def member_women_sneakers_preview():
                 }
         return jsonify(response), 200
 
+@member_posts_bp.route('/member_kids_sneakers_preview', methods=['GET'])
 @jwt_required()
-@post.route('/member_kids_sneakers_preview', methods=['GET'])
 def member_kids_sneakers_preview():
     '''
     retrieves the kids sneakers preview for logged in users
@@ -128,7 +130,7 @@ def member_kids_sneakers_preview():
         return jsonify({"error": 'An unexpected error occured. Please try again!'}), 500
 
     if not paginated_results.items:
-        return jsonify("error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
+        return jsonify({"error": 'No sneaker available at the momen. Stay tuned for new arrivals!'}), 404
     else:
         sneakers = [
                 {
@@ -155,8 +157,8 @@ def member_kids_sneakers_preview():
                 }
         return jsonify(response), 200
 
+@member_posts_bp.route('/member_jerseys_preview', methods=['GET'])
 @jwt_required()
-@post.route('/member_jerseys_preview', methods=['GET'])
 def member_jerseys_preview():
     '''
     retrieves the jerseys previews for logged in users
@@ -204,8 +206,8 @@ def member_jerseys_preview():
                 }
         return jsonify(response)
 
+@member_posts_bp.route('/member_sneaker_details/<int:sneaker_id>', methods=['GET'])
 @jwt_required()
-@post.route('/member_sneaker_details/<int:sneaker_id>', methods=['GET'])
 def member_sneaker_details(sneaker_id):
     '''
     retrieves the sneaker details from the database
@@ -235,8 +237,8 @@ def member_sneaker_details(sneaker_id):
                 }
         return jsonify(sneaker_details), 200
 
+@member_posts_bp.route('/member_jersey_details/<int:jersey_id>', methods=['GET'])
 @jwt_required()
-@posts.route('/member_jersey_details/<int:jersey_id>', methods=['GET'])
 def member_jersey_details(jersey_id):
     '''
     retrieves jersey details for logged in users

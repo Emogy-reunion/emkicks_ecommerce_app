@@ -129,7 +129,6 @@ def remove_from_cart():
         db.session.rollback()
         return jsonify({'error': 'An unexpected error occured. Please try again!'}), 500
 
-
 @cart_route('/update_cart_item', methods=['PATCH'])
 @jwt_required()
 def update_cart_item():
