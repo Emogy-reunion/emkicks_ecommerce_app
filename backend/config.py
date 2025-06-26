@@ -23,3 +23,5 @@ class Config():
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     MAIL_USE_PORT = 587
+    UPLOAD_FOLDER = '/static/uploads'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
