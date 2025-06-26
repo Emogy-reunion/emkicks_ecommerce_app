@@ -6,10 +6,10 @@ from models import db, Sneakers, Images
 from sqlalchemy.orm import selectinload
 
 
-posts = Blueprint('posts', __name__)
+user_posts_bp = Blueprint('user_posts_bp', __name__)
 
-@posts.route('/men_sneakers_preview', methods=['GET'])
-def men_sneakers_preview():
+@user_posts_bp.route('/user_men_sneakers_preview', methods=['GET'])
+def user_men_sneakers_preview():
     '''
     retrieve the men's sneakers for preview display
     returns paginated results
@@ -59,8 +59,8 @@ def men_sneakers_preview():
         return jsonify(response), 200
 
 
-@posts.route('/women_sneaker_preview', methods=['GET'])
-def women_sneakers_preview():
+@user_posts_bp.route('/user_women_sneaker_preview', methods=['GET'])
+def user_women_sneakers_preview():
     '''
     retrieves the preview for the women's sneakers
     '''
@@ -108,8 +108,8 @@ def women_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.route('/kids_sneakers_preview', methods=['GET'])
-def kids_sneakers_preview():
+@user_posts_bp.route('/user_kids_sneakers_preview', methods=['GET'])
+def user_kids_sneakers_preview():
     '''
     retrieves the kids sneakers which will be displayed as preview
     returns the paginated results
@@ -157,8 +157,8 @@ def kids_sneakers_preview():
                 }
         return jsonify(response), 200
 
-@posts.route('/jersey_preview', methods=['GET'])
-def jersey_preview():
+@user_posts_bp.route('/user_jersey_preview', methods=['GET'])
+def user_jersey_preview():
     '''
     retrieves the jersey details which will be displayed as a preview
     returns paginated results
@@ -203,7 +203,7 @@ def jersey_preview():
         return jsonify(response), 200
 
 
-@posts.route('/user_sneaker_details/<int:sneaker_id>', methods=['GET'])
+@user_posts_bp.route('/user_sneaker_details/<int:sneaker_id>', methods=['GET'])
 def user_sneaker_details(sneaker_id):
     '''
     retrieves details about the user sneakers
@@ -227,12 +227,13 @@ def user_sneaker_details(sneaker_id):
                 'status': sneaker.status,
                 'description': sneaker.description,
                 'category': sneaker.category,
+                'brand': sneaker.brand,
                 'posted_at': sneaker.posted_at,
                 'images': [image.filename for image in sneaker.images] if sneaker.images else None
                 }
     return jsonify({'details': details}), 200
 
-@posts.route('/user_jersey_details/<int:jersery_id>', methods=['GET'])
+@user_posts_bp.route('/user_jersey_details/<int:jersery_id>', methods=['GET'])
 def user_jersey_details(jersey_id):
     '''
     retrieve details about a specific jersey
