@@ -2,7 +2,7 @@
 allows users to reset their passwords
 '''
 from flask import Blueprint, request, jsonify
-from model import Users
+from models import Users
 from utils.password_reset_email import send_password_reset_email
 
 
@@ -20,9 +20,9 @@ def reset_password_token():
 
     if user:
         send_password_reset_email(user)
-        return jsonify({'success': 'Password reset email sent! Check your inbox or spam folder to reset your password.'})
+        return jsonify({'success': 'Password reset email sent! Check your inbox or spam folder to reset your password.'}), 200
     else:
-        return jsonify({'error': 'The email you entered does not match any account!'})
+        return jsonify({'error': 'The email you entered does not match any account!'}), 409
 
 
 
@@ -41,8 +41,8 @@ def update_password(token):
             user.password = user.generate_password(password)
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': 'An unexpected error has occured. Please try again!'})
+            return jsonify({'error': 'An unexpected error has occured. Please try again!'}), 500
         db.session.commit()
-        return jsonify({'success': 'Password updated successfully!'})
+        return jsonify({'success': 'Password updated successfully!'}), 200
     else:
-        return jsonify({'error': 'Verification failed. Please try again!'})
+        return jsonify({'error': 'Verification token is invalid. Please request a new one!'}), 403

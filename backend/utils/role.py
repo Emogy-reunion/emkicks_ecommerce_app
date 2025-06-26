@@ -3,7 +3,7 @@ checks the user role
 '''
 from functools import wraps
 from flask_jwt_extended import get_jwt_identity
-from model import Users
+from models import Users
 
 
 def role_required(role):
