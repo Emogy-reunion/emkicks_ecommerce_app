@@ -2,16 +2,10 @@
 Initializes the tables
 Hash passwords
 '''
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from Backend import create_app
+from core import db, create_app, bcrypt
 from itsdangerous import URLSafeTimedSerializer
 from datetime import datetime
 
-
-app = create_app()
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
 
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
