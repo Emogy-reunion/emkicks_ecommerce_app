@@ -4,25 +4,21 @@ creates initial admins
 runs the application
 registers the blueprints
 '''
-from Backend import create_app
-from Backend.routes.authentication import auth
-from flask_jwt_extended import JWTManager
-from flask_mail import Mail
-from utils.create_upload_folder import create_upload_folder
-from Backend.routes.verification import verify
-from Backend.routes.reset_password import reset
-from Backend.routes.upload import post
-from Backend.routes.user_search import user_search_bp
-from Backend.routes.member_search import member_search_bp
-from Backend.routes.user_collections import user_posts_bp
-from Backend.routes.member_collections import member_posts_bp
-from Backend.routes.cart import cart
-from Backend.routes.member_profiles import member_profile_bp
-
+from core import create_app
+from core.routes.authentication import auth
+from core.utils.create_upload_folder import create_upload_folder
+from core.routes.verification import verify
+from core.routes.reset_password import reset
+from core.routes.upload import post
+from core.routes.user_search import user_search_bp
+from core.routes.member_search import member_search_bp
+from core.routes.user_collections import user_posts_bp
+from core.routes.member_collections import member_posts_bp
+from core.routes.cart import cart
+from core.routes.member_profiles import member_profile_bp
 
 
 app = create_app()
-jwt = JWTManager(app)
 
 app.register_blueprint(auth)
 app.register_blueprint(verify)
