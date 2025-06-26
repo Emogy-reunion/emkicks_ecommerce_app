@@ -4,7 +4,7 @@ Hash passwords
 '''
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from create_app import create_app
+from Backend import create_app
 from itsdangerous import URLSafeTimedSerializer
 from datetime import datetime
 
@@ -26,7 +26,7 @@ class Users(db.Model):
     username = db.Column(db.String(50), unique=True, nullable=False)
     phone = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(50), default='guest')
+    role = db.Column(db.String(50), default='member')
     verified = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     sneakers = db.relationship('Sneakers', back_populates='user', lazy='select', cascade='all, delete-orphan')
@@ -54,7 +54,7 @@ class Users(db.Model):
     def check_passwordhash(self, password):
         '''
         compares the user password and the stored hash
-        '''
+        '''i
         return bcrypt.check_password_hash(self.password, password)
 
     def generate_email_verification_token(self):
@@ -212,6 +212,7 @@ class CartItems(db.Model):
     cart_id = db.Column(db.Integer,db.ForeignKey('cart.id'), nullable=False)
     product_type = db.Column(db.String(50), nullable=False)
     product_id = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     size = db.Column(db.String(50), nullable=False)
     subtotal = db.Column(db.Float, nullable=False)
@@ -219,7 +220,7 @@ class CartItems(db.Model):
     jerseys = db.relationship('Jerseys', backref='jersy_cart_items')
 
     def __init__(self, cart_id, product_type, product_id, quantity,
-                 size, subtotal):
+                 price, size, subtotal):
         '''
         initializes the cart items table with data
         '''
