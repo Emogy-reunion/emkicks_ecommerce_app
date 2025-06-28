@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify, request
-from Backend.models import Users, db
+from core.models import Users
+from core import db
 from flask_jwt_extended import create_access_token, create_refresh_token, set_access_cookies, set_refresh_cookies, unset_jwt_cookies, get_jwt_identity, jwt_required
-from Backend.utils.verification_email import send_verification_email
-from Backend.form import RegistrationForm, LoginForm
+from core.utils.verification_email import send_verification_email
+from core.form import RegistrationForm, LoginForm
 
 
 auth = Blueprint('auth', __name__)
