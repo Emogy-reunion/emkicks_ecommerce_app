@@ -11,7 +11,7 @@
 7. [Contact](#contact)
 
 ## Introduction
-* Welcome to EMKicks — your go-to e-commerce application for premium sneakers and jerseys!
+* Welcome to EM Kicks — your go-to e-commerce application for premium sneakers and jerseys!
 * This app powers the backend services for managing products, users, orders, and secure payments, delivering a fast and seamless shopping experience.
 * Whether you're hunting for the latest kicks or repping your favorite team with new jerseys, EMKicks has you covered!
 
