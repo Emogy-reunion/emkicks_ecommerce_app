@@ -3,11 +3,12 @@ saves uploads to the database
 '''
 from flask import Blueprint, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from utils.role import role_required
-from utils.discount import calculate_discount
+from core.utils.role import role_required
+from core.utils.discount import calculate_discount
 import os
-from models import Users, Sneakers, Images, db, Jerseys, JerseyImages
-from utils.check_file_extension import allowed_extension
+from core.models import Users, Sneakers, Images, Jerseys, JerseyImages
+from core import db
+from core.utils.check_file_extension import allowed_extension
 from werkzeug.utils import secure_filename
 from forms import SneakerUploadForm, JerseyUploadForm
 
