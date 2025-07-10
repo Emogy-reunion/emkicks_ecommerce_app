@@ -16,7 +16,7 @@
 * Whether you're hunting for the latest kicks or repping your favorite team with new jerseys, EMKicks has you covered!
 
 ## Repository Structure
-* The repo has two directories: **Backend** and **Fronted**
+* The repository has two directories: **Backend** and **Fronted**
 
 ### Backend
 * The backend consists of:
